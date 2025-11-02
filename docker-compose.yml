@@ -9,9 +9,10 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - .env
+      - ./backend/.env
     volumes:
-      - ./backend:/app
+      - ./backend/src:/app/src
+      - ./backend/uploads:/app/uploads
       - /app/node_modules
     depends_on:
       - db
