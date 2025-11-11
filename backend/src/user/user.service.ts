@@ -41,10 +41,7 @@ export class UserService {
     const existingUser = await this.userRepository.findOne({
       where: { email },
     });
-    if (!existingUser) {
-      throw new BadRequestException('User not found');
-    }
-    return existingUser;
+    return existingUser ?? null;
   }
 
   // update(id: number, updateUserDto: UpdateUserDto) {

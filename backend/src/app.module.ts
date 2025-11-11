@@ -5,7 +5,6 @@ import { getDatabaseConfig } from './config/database.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
 import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
