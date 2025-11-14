@@ -8,5 +8,9 @@ import { Subject } from './entities/subject.entity';
   imports: [TypeOrmModule.forFeature([Subject])],
   controllers: [SubjectsController],
   providers: [SubjectsService],
+  // Exporting TypeOrmModule here re-exports the repository providers
+  // so other modules that import SubjectsModule (for example CoursesModule)
+  // can inject the Subject repository via @InjectRepository(Subject).
+  exports: [TypeOrmModule],
 })
 export class SubjectsModule {}
