@@ -5,8 +5,7 @@ import {
   CreateDateColumn,
   OneToMany,
 } from 'typeorm';
-// import { Subject } from '../../subjects/entities/subject.entity';
-
+import { Subject } from 'src/modules/subjects/entities/subject.entity';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -24,15 +23,15 @@ export class User {
   @CreateDateColumn()
   createdAt: Date;
 
-  //   @Column({ type: 'timestamp', nullable: true })
-  //   lastActive: Date;
+  @Column({ type: 'timestamp', nullable: true })
+  lastActive: Date;
 
-  //   @Column({ default: 0 })
-  //   currentStreak: number;
+  @Column({ default: 0 })
+  currentStreak: number;
 
-  //   @Column({ default: 0 })
-  //   longestStreak: number;
+  @Column({ default: 0 })
+  longestStreak: number;
 
-  //   @OneToMany(() => Subject, (subject) => subject.user)
-  //   subjects: Subject[];
+  @OneToMany(() => Subject, (subject) => subject.user)
+  subjects: Subject[];
 }
