@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { SubjectsModule } from './modules/subjects/subjects.module';
 import { CoursesModule } from './modules/courses/courses.module';
+import { PdfsModule } from './modules/pdfs/pdfs.module';
 
 @Module({
   imports: [
@@ -31,6 +32,8 @@ import { CoursesModule } from './modules/courses/courses.module';
     SubjectsModule,
 
     CoursesModule,
+
+    PdfsModule,
 
     // Feature modules will be added here later
     // Example: AuthModule, SubjectsModule, etc.
