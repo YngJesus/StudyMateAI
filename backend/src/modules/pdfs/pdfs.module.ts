@@ -9,5 +9,6 @@ import { CoursesModule } from '../courses/courses.module';
   imports: [TypeOrmModule.forFeature([Pdf]), CoursesModule],
   controllers: [PdfsController],
   providers: [PdfsService],
+  exports: [TypeOrmModule],
 })
 export class PdfsModule {}

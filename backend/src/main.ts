@@ -7,10 +7,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Enable CORS (so frontend can connect)
-  // app.enableCors({
-  //   origin: ['http://localhost:4200', 'http://localhost:3000'],
-  //   credentials: true,
-  // });
+  app.enableCors({
+    origin: ['http://localhost:4200', 'http://localhost:3000'],
+    credentials: true,
+  });
 
   // Global validation pipe
   app.useGlobalPipes(
@@ -35,7 +35,7 @@ async function bootstrap() {
     .addTag('Subjects', 'Subject management endpoints')
     .addTag('Courses', 'Course management endpoints')
     .addTag('PDFs', 'PDF file management endpoints')
-    .addTag('AI', 'AI-powered features (summarization, quiz, chat)')
+    .addTag('AI Chat', 'AI-powered chat with PDF attachment')
     .addTag('Calendar', 'Events and deadlines management')
     .addTag('Dashboard', 'Dashboard and statistics endpoints')
     .addBearerAuth(

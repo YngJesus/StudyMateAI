@@ -6,6 +6,8 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Subject } from 'src/modules/subjects/entities/subject.entity';
+import { ApiHideProperty } from '@nestjs/swagger';
+
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -14,6 +16,7 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @ApiHideProperty()
   @Column()
   password: string;
 
@@ -32,6 +35,7 @@ export class User {
   @Column({ default: 0 })
   longestStreak: number;
 
+  @ApiHideProperty()
   @OneToMany(() => Subject, (subject) => subject.user)
   subjects: Subject[];
 }

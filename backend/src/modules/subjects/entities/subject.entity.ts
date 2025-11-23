@@ -8,6 +8,8 @@ import {
   OneToMany,
   ManyToOne,
 } from 'typeorm';
+import { ApiHideProperty } from '@nestjs/swagger';
+
 @Entity('subjects')
 export class Subject {
   @PrimaryGeneratedColumn('uuid')
@@ -25,9 +27,11 @@ export class Subject {
   @Column({ nullable: true })
   professor: string;
 
+  @ApiHideProperty()
   @ManyToOne(() => User, (user) => user.subjects, { onDelete: 'CASCADE' })
   user: User;
 
+  @ApiHideProperty()
   @OneToMany(() => Course, (course) => course.subject)
   courses: Course[];
 

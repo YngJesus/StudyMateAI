@@ -6,7 +6,7 @@ import {
   JoinColumn,
   CreateDateColumn,
 } from 'typeorm';
-
+import { ApiHideProperty } from '@nestjs/swagger';
 import { Course } from '../../courses/entities/course.entity';
 
 @Entity({ name: 'pdfs' })
@@ -17,6 +17,7 @@ export class Pdf {
   @Column({ type: 'varchar', length: 200 })
   fileName: string;
 
+  @ApiHideProperty()
   @Column({ type: 'varchar', length: 500 })
   filePath: string;
 
@@ -33,6 +34,7 @@ export class Pdf {
   @Column({ type: 'uuid' })
   courseId: string;
 
+  @ApiHideProperty()
   @ManyToOne(() => Course, (course) => course.pdfs, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'courseId' })
   course: Course;
