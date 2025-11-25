@@ -225,6 +225,7 @@ Be concise, educational, and encouraging. If you don't know something, be honest
    */
   async sendMessage(
     userId: string,
+    sessionId: string,
     dto: ChatMessageDto,
   ): Promise<ChatResponseDto> {
     let pdfFile: Pdf | null = null;
@@ -292,6 +293,8 @@ Be concise, educational, and encouraging. If you don't know something, be honest
       userId,
     });
 
+    chatHistory.sessionId = sessionId;
+
     const saved = await this.chatRepository.save(chatHistory);
 
     console.log(`✅ Chat saved with ID: ${saved.id}`);
@@ -312,13 +315,13 @@ Be concise, educational, and encouraging. If you don't know something, be honest
    */
   async getChatHistory(
     userId: string,
-    limit: number = 50,
+    sessionId: string,
   ): Promise<ChatResponseDto[]> {
     const chats = await this.chatRepository.find({
-      where: { userId },
+      where: { userId, sessionId },
       relations: ['pdfFile'],
       order: { createdAt: 'DESC' },
-      take: limit,
+      take: 50,
     });
 
     return chats.map((chat) => ({

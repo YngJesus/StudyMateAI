@@ -9,6 +9,7 @@ import {
 import { ApiHideProperty } from '@nestjs/swagger';
 import { User } from '../../../user/entities/user.entity';
 import { Pdf } from '../../pdfs/entities/pdf.entity';
+import { ChatSession } from '../messages/chat-message.entity';
 
 @Entity('chat_history')
 export class ChatHistory {
@@ -36,6 +37,14 @@ export class ChatHistory {
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;
+  @ManyToOne(() => ChatSession, (session) => session.messages, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'sessionId' })
+  session: ChatSession;
+
+  @Column({ type: 'uuid', nullable: true })
+  sessionId: string;
 
   @CreateDateColumn()
   createdAt: Date;
