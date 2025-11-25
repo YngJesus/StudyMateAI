@@ -10,7 +10,7 @@ export class LoginDto {
   email: string;
 
   @ApiProperty({
-    example: 'baha123',
+    example: 'baha.123',
     description: 'User password',
     minLength: 8,
     maxLength: 128,
