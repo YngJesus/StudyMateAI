@@ -10,6 +10,7 @@ import { SubjectsModule } from './modules/subjects/subjects.module';
 import { CoursesModule } from './modules/courses/courses.module';
 import { PdfsModule } from './modules/pdfs/pdfs.module';
 import { ChatModule } from './modules/chat/chat.module';
+import { EventsModule } from './modules/events/events.module';
 
 @Module({
   imports: [
@@ -37,6 +38,8 @@ import { ChatModule } from './modules/chat/chat.module';
     PdfsModule,
 
     ChatModule,
+
+    EventsModule,
 
     // Feature modules will be added here later
     // Example: AuthModule, SubjectsModule, etc.

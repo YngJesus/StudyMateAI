@@ -9,6 +9,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { ApiHideProperty } from '@nestjs/swagger';
+import { Event } from 'src/modules/events/entities/event.entity';
 
 @Entity('subjects')
 export class Subject {
@@ -34,6 +35,10 @@ export class Subject {
   @ApiHideProperty()
   @OneToMany(() => Course, (course) => course.subject)
   courses: Course[];
+
+  @ApiHideProperty()
+  @OneToMany(() => Event, (event) => event.subject)
+  events: Event[];
 
   @CreateDateColumn()
   createdAt: Date;

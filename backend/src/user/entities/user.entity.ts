@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Subject } from 'src/modules/subjects/entities/subject.entity';
 import { ApiHideProperty } from '@nestjs/swagger';
+import { Event } from 'src/modules/events/entities/event.entity';
 
 @Entity('users')
 export class User {
@@ -38,4 +39,8 @@ export class User {
   @ApiHideProperty()
   @OneToMany(() => Subject, (subject) => subject.user)
   subjects: Subject[];
+
+  @ApiHideProperty()
+  @OneToMany(() => Event, (event) => event.user)
+  events: Event[];
 }
