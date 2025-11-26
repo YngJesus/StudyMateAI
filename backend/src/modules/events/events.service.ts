@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between, MoreThanOrEqual, LessThanOrEqual } from 'typeorm';
+import { Repository, Between } from 'typeorm';
 import { Event } from './entities/event.entity';
 import { Subject } from '../subjects/entities/subject.entity';
 import { CreateEventDto } from './dto/create-event.dto';
@@ -24,29 +24,22 @@ export class EventsService {
   // ------------------------------------------------------------------
   // CREATE EVENT
   // ------------------------------------------------------------------
-  async create(dto: CreateEventDto) {
-    // Validate subject exists
+  async create(userId: string, dto: CreateEventDto) {
+    // ✅ FIXED: Query through relation
     const subject = await this.subjectRepo.findOne({
-      where: { id: dto.subjectId },
+      where: {
+        id: dto.subjectId,
+        user: { id: userId },
+      },
     });
 
     if (!subject) {
-      throw new BadRequestException('Subject not found');
-    }
-
-    // Validate title
-    if (dto.title.length < 3 || dto.title.length > 200) {
       throw new BadRequestException(
-        'Title must be between 3 and 200 characters',
+        'Subject not found or does not belong to you',
       );
     }
 
-    // Validate type
-    if (!['exam', 'ds', 'assignment'].includes(dto.type)) {
-      throw new BadRequestException('Invalid event type');
-    }
-
-    // Validate date
+    // Validate date format
     const eventDate = new Date(dto.date);
     if (isNaN(eventDate.getTime())) {
       throw new BadRequestException('Invalid date format');
@@ -54,33 +47,45 @@ export class EventsService {
 
     const event = this.eventRepo.create({
       ...dto,
+      userId,
       subject,
     });
 
     await this.eventRepo.save(event);
 
-    // Return with computed fields
     return this.formatEvent(event);
   }
 
   // ------------------------------------------------------------------
   // GET ALL WITH FILTERS
   // ------------------------------------------------------------------
-  async getAll(filters: EventFiltersDto) {
-    const where: any = {};
+  async getAll(userId: string, filters: EventFiltersDto) {
+    const where: any = { userId };
 
     if (filters.type) where.type = filters.type;
     if (filters.subjectId) where.subject = { id: filters.subjectId };
+    if (filters.date) where.date = filters.date;
 
     if (filters.from && filters.to) {
       where.date = Between(filters.from, filters.to);
     }
 
-    const events = await this.eventRepo.find({
+    if (filters.upcoming) {
+      const today = new Date().toISOString().split('T')[0];
+      where.date = Between(today, '2099-12-31');
+    }
+
+    const queryOptions: any = {
       where,
       relations: ['subject'],
       order: { date: 'ASC' },
-    });
+    };
+
+    if (filters.limit) {
+      queryOptions.take = filters.limit;
+    }
+
+    const events = await this.eventRepo.find(queryOptions);
 
     return events.map((e) => this.formatEvent(e));
   }
@@ -88,13 +93,15 @@ export class EventsService {
   // ------------------------------------------------------------------
   // GET SINGLE EVENT
   // ------------------------------------------------------------------
-  async findOne(id: string) {
+  async findOne(userId: string, id: string) {
     const event = await this.eventRepo.findOne({
-      where: { id },
+      where: { id, userId },
       relations: ['subject'],
     });
 
-    if (!event) throw new NotFoundException('Event not found');
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
 
     return this.formatEvent(event);
   }
@@ -102,17 +109,20 @@ export class EventsService {
   // ------------------------------------------------------------------
   // UPCOMING EVENTS (NEXT 7 DAYS)
   // ------------------------------------------------------------------
-  async getUpcoming() {
+  async getUpcoming(userId: string, days: number = 7) {
     const today = new Date();
-    const nextWeek = new Date();
-    nextWeek.setDate(today.getDate() + 7);
+    today.setHours(0, 0, 0, 0);
+
+    const futureDate = new Date(today);
+    futureDate.setDate(today.getDate() + days);
+
+    const todayStr = today.toISOString().split('T')[0];
+    const futureStr = futureDate.toISOString().split('T')[0];
 
     const events = await this.eventRepo.find({
       where: {
-        date: Between(
-          today.toISOString().split('T')[0],
-          nextWeek.toISOString().split('T')[0],
-        ),
+        userId,
+        date: Between(todayStr, futureStr),
       },
       relations: ['subject'],
       order: { date: 'ASC' },
@@ -124,9 +134,23 @@ export class EventsService {
   // ------------------------------------------------------------------
   // DATE RANGE FILTER
   // ------------------------------------------------------------------
-  async getRange(from: string, to: string) {
+  async getRange(userId: string, from: string, to: string) {
+    const fromDate = new Date(from);
+    const toDate = new Date(to);
+
+    if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime())) {
+      throw new BadRequestException('Invalid date format');
+    }
+
+    if (fromDate > toDate) {
+      throw new BadRequestException('"from" date must be before "to" date');
+    }
+
     const events = await this.eventRepo.find({
-      where: { date: Between(from, to) },
+      where: {
+        userId,
+        date: Between(from, to),
+      },
       relations: ['subject'],
       order: { date: 'ASC' },
     });
@@ -137,26 +161,39 @@ export class EventsService {
   // ------------------------------------------------------------------
   // UPDATE
   // ------------------------------------------------------------------
-  async update(id: string, dto: UpdateEventDto) {
+  async update(userId: string, id: string, dto: UpdateEventDto) {
     const event = await this.eventRepo.findOne({
-      where: { id },
+      where: { id, userId },
       relations: ['subject'],
     });
 
-    if (!event) throw new NotFoundException('Event not found');
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
 
-    // Validate subject if changed
-    if (dto.subjectId) {
+    // ✅ FIXED: Query through relation
+    if (dto.subjectId && dto.subjectId !== event.subjectId) {
       const subject = await this.subjectRepo.findOne({
-        where: { id: dto.subjectId },
+        where: {
+          id: dto.subjectId,
+          user: { id: userId },
+        },
       });
       if (!subject) {
-        throw new BadRequestException('Subject not found');
+        throw new BadRequestException(
+          'Subject not found or does not belong to you',
+        );
       }
       event.subject = subject;
     }
 
-    // Update fields
+    if (dto.date) {
+      const eventDate = new Date(dto.date);
+      if (isNaN(eventDate.getTime())) {
+        throw new BadRequestException('Invalid date format');
+      }
+    }
+
     Object.assign(event, dto);
 
     await this.eventRepo.save(event);
@@ -167,12 +204,16 @@ export class EventsService {
   // ------------------------------------------------------------------
   // DELETE
   // ------------------------------------------------------------------
-  async remove(id: string) {
-    const event = await this.eventRepo.findOne({ where: { id } });
+  async remove(userId: string, id: string) {
+    const event = await this.eventRepo.findOne({
+      where: { id, userId },
+    });
 
-    if (!event) throw new NotFoundException('Event not found');
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
 
-    await this.eventRepo.delete(id);
+    await this.eventRepo.remove(event);
 
     return { message: 'Event deleted successfully' };
   }
@@ -180,14 +221,15 @@ export class EventsService {
   // ------------------------------------------------------------------
   // Helper: Calculate Days Until
   // ------------------------------------------------------------------
-  private calculateDaysUntil(date: string) {
+  private calculateDaysUntil(date: string): number {
     const eventDate = new Date(date);
     const today = new Date();
 
-    const diffTime =
-      eventDate.getTime() - new Date(today.toDateString()).getTime();
+    eventDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
 
-    return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const diffTime = eventDate.getTime() - today.getTime();
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
 
   // ------------------------------------------------------------------
@@ -202,7 +244,7 @@ export class EventsService {
       title: event.title,
       type: event.type,
       date: event.date,
-      description: event.description,
+      description: event.description || null,
       subject: {
         id: event.subject.id,
         name: event.subject.name,

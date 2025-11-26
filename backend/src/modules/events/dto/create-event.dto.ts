@@ -56,12 +56,4 @@ export class CreateEventDto {
   })
   @IsUUID()
   subjectId: string;
-
-  @ApiProperty({
-    description: 'User ID (UUID) who created the event',
-    format: 'uuid',
-    example: '0f8fad5b-d9cb-469f-a165-70867728950e',
-  })
-  @IsUUID()
-  userId: string;
 }
