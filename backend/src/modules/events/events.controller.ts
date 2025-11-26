@@ -22,7 +22,7 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
-@ApiTags('Events')
+@ApiTags('Calendar')
 @UseGuards(JwtAuthGuard) // ✅ Protect all routes
 @ApiBearerAuth('JWT-auth')
 @Controller('events')
