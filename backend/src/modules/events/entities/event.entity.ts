@@ -1,3 +1,4 @@
+import { Notification } from 'src/modules/notifications/entities/notification.entity';
 import { Subject } from 'src/modules/subjects/entities/subject.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
@@ -8,6 +9,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
 export enum EventType {
@@ -50,6 +52,9 @@ export class Event {
   @ManyToOne(() => User, (user) => user.events, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;
+
+  @OneToMany(() => Notification, (notification) => notification.event)
+  notifications: Notification[];
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
