@@ -11,6 +11,7 @@ import {
   Patch,
 } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
+import { NotificationsCronService } from './notifications-cron.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { NotificationFiltersDto } from './dto/notification-filters.dto';
 import {
@@ -26,7 +27,10 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @UseGuards(JwtAuthGuard)
 @Controller('notifications')
 export class NotificationsController {
-  constructor(private readonly notificationsService: NotificationsService) {}
+  constructor(
+    private readonly notificationsService: NotificationsService,
+    private readonly notificationsCronService: NotificationsCronService,
+  ) {}
 
   // -------------------------------------------------------
   // CREATE
@@ -83,5 +87,16 @@ export class NotificationsController {
   @ApiOperation({ summary: 'Clear all notifications' })
   clearAll(@Req() req) {
     return this.notificationsService.clearAll(req.user.userId);
+  }
+
+  // -------------------------------------------------------
+  // TRIGGER CRON JOB MANUALLY (FOR TESTING)
+  // -------------------------------------------------------
+  @Post('cron/trigger')
+  @ApiOperation({
+    summary: 'Manually trigger the cron job to check for upcoming events',
+  })
+  triggerCron() {
+    return this.notificationsCronService.triggerManually();
   }
 }

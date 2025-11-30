@@ -1,0 +1,2 @@
+# Angular component templates use @if/@for syntax that Prettier doesn't support yet
+*.component.html
