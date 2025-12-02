@@ -1,0 +1,119 @@
+<div class="login-container">
+  <canvas #canvas class="background-canvas"></canvas>
+
+  <div class="particles-container">
+    <div
+      *ngFor="let particle of particles"
+      class="particle"
+      [style.left.%]="particle.x"
+      [style.top.%]="particle.y"
+      [style.animation-delay.s]="particle.delay"
+    ></div>
+  </div>
+
+  <div class="content-wrapper">
+    <!-- Left Section (reused branding) -->
+    <div class="branding-section" #brandingSection>
+      <div class="brand-content">
+        <h1 class="brand-title">
+          <span class="brand-study">StudyMate</span>
+          <span class="brand-ai">AI</span>
+        </h1>
+        <p class="brand-subtitle">Create your free account</p>
+      </div>
+    </div>
+
+    <!-- Sign Up Form -->
+    <div class="form-section">
+      <div class="login-card" #loginCard>
+        <div class="card-glow"></div>
+
+        <div class="card-content">
+          <div class="form-header">
+            <h2 class="form-title">Create Account</h2>
+            <p class="form-subtitle">Join the next generation of learning</p>
+          </div>
+
+          <div class="form-body">
+            <!-- Full Name -->
+            <div class="input-group">
+              <label class="input-label">Full Name</label>
+              <div class="input-wrapper">
+                <input
+                  type="text"
+                  class="form-input"
+                  [(ngModel)]="fullName"
+                  name="fullName"
+                  placeholder="Aya Bourigua"
+                />
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="input-group">
+              <label class="input-label">Email</label>
+              <div class="input-wrapper">
+                <input
+                  type="email"
+                  class="form-input"
+                  [(ngModel)]="email"
+                  name="email"
+                  placeholder="you@university.edu"
+                />
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="input-group">
+              <label class="input-label">Password</label>
+              <div class="input-wrapper">
+                <input
+                  type="password"
+                  class="form-input"
+                  [(ngModel)]="password"
+                  name="password"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="input-group">
+              <label class="input-label">Confirm Password</label>
+              <div class="input-wrapper">
+                <input
+                  type="password"
+                  class="form-input"
+                  [(ngModel)]="confirmPassword"
+                  name="confirmPassword"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+
+            <!-- Error / Success -->
+            <div *ngIf="errorMessage" class="message message-error">
+              {{ errorMessage }}
+            </div>
+
+            <!-- Submit -->
+            <button class="submit-btn" (click)="onSubmit()" [disabled]="isLoading">
+              <span class="btn-bg"></span>
+              <span class="btn-content">
+                <span *ngIf="!isLoading">Create Account</span>
+                <span *ngIf="isLoading">Signing up...</span>
+              </span>
+            </button>
+
+            <!-- Switch -->
+            <div class="signup-link">
+              <span>Already have an account?</span>
+              <a routerLink="/login">Sign in</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
