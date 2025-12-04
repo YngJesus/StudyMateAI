@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "frontend": {
+    "studyai": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -17,6 +17,9 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -24,12 +27,19 @@
                 "input": "public"
               }
             ],
+<<<<<<< HEAD
             "styles": ["src/styles.css"],
             "server": "src/main.server.ts",
             "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts"
             }
+=======
+            "styles": [
+              "src/styles.css"
+            ]
+            
+>>>>>>> 00464d4ead25df3f8333cbe7d82ccf2e3ede44cc
           },
           "configurations": {
             "production": {
@@ -59,16 +69,36 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "frontend:build:production"
+              "buildTarget": "studyai:build:production"
             },
             "development": {
-              "buildTarget": "frontend:build:development"
+              "buildTarget": "studyai:build:development"
             }
           },
           "defaultConfiguration": "development"
         },
         "test": {
+<<<<<<< HEAD
           "builder": "@angular/build:unit-test"
+=======
+          "builder": "@angular/build:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "tsconfig.spec.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "src/styles.css"
+            ]
+          }
+>>>>>>> 00464d4ead25df3f8333cbe7d82ccf2e3ede44cc
         }
       }
     }

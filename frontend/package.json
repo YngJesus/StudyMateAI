@@ -1,13 +1,17 @@
 {
-  "name": "frontend",
+  "name": "studyai",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+<<<<<<< HEAD
     "start": "ng serve --host 0.0.0.0 --poll=2000",
+=======
+    "start": "ng serve",
+    "watch-css": "node node_modules/tailwindcss/cli.js -i ./src/styles.css -o ./src/styles.css --watch",
+>>>>>>> 00464d4ead25df3f8333cbe7d82ccf2e3ede44cc
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:frontend": "node dist/frontend/server/server.mjs"
+    "test": "ng test"
   },
   "prettier": {
     "printWidth": 100,
@@ -24,6 +28,7 @@
   "private": true,
   "packageManager": "npm@11.6.1",
   "dependencies": {
+<<<<<<< HEAD
     "@angular/common": "^21.0.0",
     "@angular/compiler": "^21.0.0",
     "@angular/core": "^21.0.0",
@@ -46,6 +51,24 @@
     "@tailwindcss/postcss": "^4.1.12",
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
+=======
+    "@angular/common": "^20.3.0",
+    "@angular/compiler": "^20.3.0",
+    "@angular/core": "^20.3.0",
+    "@angular/forms": "^20.3.0",
+    "@angular/platform-browser": "^20.3.0",
+    "@angular/router": "^20.3.0",
+    "@tailwindcss/cli": "^4.1.17",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.15.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^20.3.8",
+    "@angular/cli": "^20.3.8",
+    "@angular/compiler-cli": "^20.3.0",
+    "@types/jasmine": "~5.1.0",
+>>>>>>> 00464d4ead25df3f8333cbe7d82ccf2e3ede44cc
     "autoprefixer": "^10.4.22",
     "jsdom": "^27.1.0",
     "postcss": "^8.5.6",

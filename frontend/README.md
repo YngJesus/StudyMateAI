@@ -1,6 +1,10 @@
-# Frontend
+# Studyai
 
+<<<<<<< HEAD
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.2.
+=======
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.8.
+>>>>>>> 00464d4ead25df3f8333cbe7d82ccf2e3ede44cc
 
 ## Development server
 

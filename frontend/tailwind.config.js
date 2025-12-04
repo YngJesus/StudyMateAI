@@ -1,7 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{html,ts}'],
+  content: ['./src/**/*.{html,ts,css,scss}'],
   theme: {
+<<<<<<< HEAD
     extend: {
       colors: {
         // Ocean Blue Theme - Professional & Modern
@@ -58,6 +59,9 @@ module.exports = {
         'gradient-ocean-dark': 'linear-gradient(135deg, #055775 0%, #002966 100%)',
       },
     },
+=======
+    extend: {},
+>>>>>>> 00464d4ead25df3f8333cbe7d82ccf2e3ede44cc
   },
   plugins: [],
 };

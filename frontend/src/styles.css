@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap');
 
@@ -196,4 +197,19 @@
 * {
   transition-property: colors;
   transition-duration: 200ms;
+=======
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+>>>>>>> 00464d4ead25df3f8333cbe7d82ccf2e3ede44cc
 }
