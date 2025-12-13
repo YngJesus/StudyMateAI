@@ -1,0 +1,153 @@
+<div class="space-y-6">
+  <!-- Welcome Section -->
+  <section class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 text-white shadow-lg">
+    <h1 class="text-3xl font-bold mb-2">Welcome back! 👋</h1>
+    <p class="text-blue-100">Here's what's happening with your studies today.</p>
+  </section>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+  <div class="flex items-center justify-center py-12" role="status" aria-live="polite">
+    <div class="text-center">
+      <div
+        class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"
+      ></div>
+      <p class="text-gray-600">Loading dashboard...</p>
+    </div>
+  </div>
+  }
+
+  <!-- Stats Grid -->
+  @if (!isLoading() && stats()) {
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @for (card of statCards; track card.key) {
+    <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-medium">{{ card.label }}</p>
+          <p class="text-3xl font-bold text-gray-800 mt-2">
+            {{ getStatValue(card.key) }}
+          </p>
+        </div>
+        <div
+          [class]="card.color + ' w-16 h-16 rounded-full flex items-center justify-center text-3xl'"
+          aria-hidden="true"
+        >
+          {{ card.icon }}
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+  <!-- Quick Actions -->
+  <section class="bg-white rounded-xl shadow-md p-6">
+    <h3 class="text-xl font-bold text-gray-800 mb-4">Quick Actions</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <a
+        [routerLink]="'/subjects'"
+        class="flex flex-col items-center justify-center p-6 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400"
+        aria-label="Add Subject"
+      >
+        <span class="text-4xl mb-2" aria-hidden="true">📚</span>
+        <span class="font-semibold text-gray-700">Add Subject</span>
+      </a>
+
+      <a
+        [routerLink]="'/chat'"
+        class="flex flex-col items-center justify-center p-6 bg-green-50 hover:bg-green-100 rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-400"
+        aria-label="AI Chat"
+      >
+        <span class="text-4xl mb-2" aria-hidden="true">🤖</span>
+        <span class="font-semibold text-gray-700">AI Chat</span>
+      </a>
+
+      <a
+        [routerLink]="'/calendar'"
+        class="flex flex-col items-center justify-center p-6 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-purple-400"
+        aria-label="Add Event"
+      >
+        <span class="text-4xl mb-2" aria-hidden="true">📅</span>
+        <span class="font-semibold text-gray-700">Add Event</span>
+      </a>
+
+      <a
+        [routerLink]="'/profile'"
+        class="flex flex-col items-center justify-center p-6 bg-pink-50 hover:bg-pink-100 rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-pink-400"
+        aria-label="Settings"
+      >
+        <span class="text-4xl mb-2" aria-hidden="true">⚙️</span>
+        <span class="font-semibold text-gray-700">Settings</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Recent Activity & Upcoming Events -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Recent Activity -->
+    <section class="bg-white rounded-xl shadow-md p-6">
+      <h3 class="text-xl font-bold text-gray-800 mb-4">Recent Activity</h3>
+      @if (stats()?.recentActivity?.length) {
+      <div class="space-y-3">
+        @for (activity of stats()?.recentActivity; track $index) {
+        <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+          <span class="text-2xl" aria-hidden="true">{{ activity.icon }}</span>
+          <div class="flex-1">
+            <p class="font-semibold text-gray-800">{{ activity.title }}</p>
+            <p class="text-sm text-gray-600">{{ activity.description }}</p>
+            <p class="text-xs text-gray-400 mt-1">
+              {{ activity.timestamp | date : 'short' }}
+            </p>
+          </div>
+        </div>
+        }
+      </div>
+      } @else {
+      <p class="text-gray-500 text-center py-8">No recent activity</p>
+      }
+    </section>
+
+    <!-- Upcoming Events -->
+    <section class="bg-white rounded-xl shadow-md p-6">
+      <h3 class="text-xl font-bold text-gray-800 mb-4">Upcoming Events</h3>
+      @if (stats()?.upcomingEvents?.length) {
+      <div class="space-y-3">
+        @for (event of stats()?.upcomingEvents; track event.id) {
+        <div
+          class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border-l-4"
+          [class.border-red-500]="event.urgency === 'urgent'"
+          [class.border-yellow-500]="event.urgency === 'soon'"
+          [class.border-blue-500]="event.urgency === 'normal'"
+        >
+          <span class="text-2xl" aria-hidden="true">📅</span>
+          <div class="flex-1">
+            <p class="font-semibold text-gray-800">{{ event.title }}</p>
+            <p class="text-sm text-gray-600">{{ event.type }}</p>
+            <p class="text-xs text-gray-400 mt-1">{{ event.date }} • {{ event.daysUntil }} days</p>
+          </div>
+        </div>
+        }
+      </div>
+      } @else {
+      <p class="text-gray-500 text-center py-8">No upcoming events</p>
+      }
+    </section>
+  </div>
+  }
+
+  <!-- Empty State -->
+  @if (!isLoading() && !stats()) {
+  <section class="bg-white rounded-xl shadow-md p-12 text-center">
+    <span class="text-6xl mb-4 block" aria-hidden="true">📚</span>
+    <h3 class="text-2xl font-bold text-gray-800 mb-2">Welcome to StudyMate AI!</h3>
+    <p class="text-gray-600 mb-6">Get started by adding your first subject</p>
+
+    <a
+      [routerLink]="'/subjects'"
+      class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400"
+    >
+      Add Your First Subject
+    </a>
+  </section>
+  }
+</div>

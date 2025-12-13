@@ -1,0 +1,24 @@
+<header class="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
+  <div class="flex items-center justify-between">
+    <!-- Page Title -->
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800">{{ pageTitle() }}</h2>
+      <p class="text-sm text-gray-500 mt-1">{{ formattedDate }}</p>
+    </div>
+
+    <!-- Right Side - Time & Quick Actions -->
+    <div class="flex items-center gap-4">
+      <!-- Current Time -->
+      <div class="text-right">
+        <p class="text-2xl font-bold text-blue-600">{{ formattedTime }}</p>
+        <p class="text-xs text-gray-500">Local Time</p>
+      </div>
+
+      <!-- Notifications Badge (placeholder for future) -->
+      <button class="relative p-2 hover:bg-gray-100 rounded-lg transition-colors">
+        <span class="text-2xl">🔔</span>
+        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+      </button>
+    </div>
+  </div>
+</header>
