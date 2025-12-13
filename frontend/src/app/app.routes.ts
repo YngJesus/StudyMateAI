@@ -48,6 +48,11 @@ export const routes: Routes = [
           import('./features/subjects/subjects/subjects').then((m) => m.Subjects),
       },
       {
+        path: 'subjects/:id',
+        loadComponent: () =>
+          import('./features/subjects/subject-detail/subject-detail').then((m) => m.SubjectDetail),
+      },
+      {
         path: 'chat',
         loadComponent: () => import('./features/chat/chat/chat').then((m) => m.Chat),
       },
@@ -60,12 +65,13 @@ export const routes: Routes = [
         path: 'profile',
         loadComponent: () => import('./features/profile/profile/profile').then((m) => m.Profile),
       },
+      {
+        path: 'courses/:id',
+        loadComponent: () =>
+          import('./features/courses/course-detail/course-detail').then((m) => m.CourseDetail),
+      },
     ],
   },
-  // {
-  //   path: 'subjects/:id',
-  //   loadComponent: () => import('./features/subjects/subjects/subjects').then((m) => m.Subjects),
-  // },
 
   // Wildcard route - redirect to home
   {

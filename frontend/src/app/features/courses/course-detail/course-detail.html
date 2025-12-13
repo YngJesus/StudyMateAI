@@ -1,0 +1,296 @@
+<div class="space-y-6">
+  <!-- Back Button & Header -->
+  <div class="flex items-center gap-4">
+    <button
+      (click)="goBack()"
+      class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+      title="Back"
+    >
+      <span class="text-2xl">←</span>
+    </button>
+
+    @if (currentCourse(); as course) {
+    <div class="flex-1">
+      <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+        <span class="text-4xl">📖</span>
+        {{ course.name }}
+      </h1>
+      @if (course.description) {
+      <p class="text-gray-600 mt-1">{{ course.description }}</p>
+      }
+    </div>
+
+    <button
+      (click)="openUploadModal()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-colors"
+    >
+      <span class="text-xl">⬆️</span>
+      <span>Upload PDF</span>
+    </button>
+    }
+  </div>
+
+  <!-- Loading State -->
+  @if (pdfService.isLoading()) {
+  <div class="flex items-center justify-center py-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+  </div>
+  }
+
+  <!-- Error Message -->
+  @if (errorMessage() && !showUploadModal() && !showEditPdfModal()) {
+  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+    {{ errorMessage() }}
+  </div>
+  }
+
+  <!-- PDFs Grid -->
+  @if (!pdfService.isLoading()) { @if (pdfService.pdfs().length > 0) {
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @for (pdf of pdfService.pdfs(); track pdf.id) {
+    <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6">
+      <!-- PDF Icon -->
+      <div class="text-5xl mb-4 text-center">📄</div>
+
+      <!-- PDF Info -->
+      <h3 class="text-lg font-bold text-gray-800 mb-2 truncate" [title]="pdf.fileName">
+        {{ pdf.fileName }}
+      </h3>
+
+      <p class="text-sm text-gray-600 mb-2">Size: {{ formatFileSize(pdf.fileSize) }}</p>
+
+      @if (pdf.description) {
+      <p class="text-sm text-gray-600 mb-3 line-clamp-2">
+        {{ pdf.description }}
+      </p>
+      } @if (pdf.tags && pdf.tags.length > 0) {
+      <div class="flex flex-wrap gap-1 mb-3">
+        @for (tag of pdf.tags; track tag) {
+        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+          {{ tag }}
+        </span>
+        }
+      </div>
+      }
+
+      <p class="text-xs text-gray-500 mb-4">Uploaded: {{ pdf.uploadDate | date : 'short' }}</p>
+
+      <!-- Action Buttons -->
+      <div class="grid grid-cols-3 gap-2">
+        <button
+          (click)="downloadPdf(pdf)"
+          class="bg-green-100 hover:bg-green-200 text-green-700 py-2 rounded-lg transition-colors text-sm font-semibold"
+          title="Download"
+        >
+          ⬇️
+        </button>
+        <button
+          (click)="openEditPdfModal(pdf)"
+          class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg transition-colors text-sm font-semibold"
+          title="Edit"
+        >
+          ✏️
+        </button>
+        <button
+          (click)="openDeletePdfModal(pdf)"
+          class="bg-red-100 hover:bg-red-200 text-red-700 py-2 rounded-lg transition-colors text-sm font-semibold"
+          title="Delete"
+        >
+          🗑️
+        </button>
+      </div>
+    </div>
+    }
+  </div>
+  } @else {
+  <!-- Empty State -->
+  <div class="bg-white rounded-xl shadow-md p-12 text-center">
+    <span class="text-6xl mb-4 block">📄</span>
+    <h3 class="text-2xl font-bold text-gray-800 mb-2">No PDFs uploaded yet</h3>
+    <p class="text-gray-600 mb-6">Upload your study materials to get started</p>
+    <button
+      (click)="openUploadModal()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold"
+    >
+      Upload Your First PDF
+    </button>
+  </div>
+  } }
+</div>
+
+<!-- Upload PDF Modal -->
+@if (showUploadModal()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Upload PDF</h2>
+
+    @if (errorMessage()) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ errorMessage() }}
+    </div>
+    }
+
+    <div class="space-y-4">
+      <!-- File Input -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Select PDF File *</label>
+        <input
+          type="file"
+          accept=".pdf"
+          (change)="onFileSelected($event)"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        @if (selectedFile()) {
+        <p class="text-sm text-green-600 mt-2">✓ Selected: {{ selectedFile()!.name }}</p>
+        }
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Description</label>
+        <textarea
+          [value]="uploadMetadata().description"
+          (input)="updateMetadataField('description', $any($event.target).value)"
+          placeholder="Brief description..."
+          rows="3"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+        ></textarea>
+      </div>
+
+      <!-- Tags -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Tags</label>
+        <input
+          type="text"
+          [value]="uploadMetadata().tags"
+          (input)="updateMetadataField('tags', $any($event.target).value)"
+          placeholder="chapter1, midterm, notes"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <p class="text-xs text-gray-500 mt-1">Separate tags with commas</p>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex gap-3 mt-6">
+      <button
+        (click)="closeModals()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold transition-colors"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="uploadPdf()"
+        [disabled]="isSubmitting() || !selectedFile()"
+        class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors"
+      >
+        @if (isSubmitting()) {
+        <span>Uploading...</span>
+        } @else {
+        <span>Upload</span>
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Edit PDF Modal -->
+@if (showEditPdfModal() && selectedPdf()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Edit PDF Metadata</h2>
+
+    @if (errorMessage()) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ errorMessage() }}
+    </div>
+    }
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Description</label>
+        <textarea
+          [value]="uploadMetadata().description"
+          (input)="updateMetadataField('description', $any($event.target).value)"
+          rows="3"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+        ></textarea>
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Tags</label>
+        <input
+          type="text"
+          [value]="uploadMetadata().tags"
+          (input)="updateMetadataField('tags', $any($event.target).value)"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+    </div>
+
+    <div class="flex gap-3 mt-6">
+      <button
+        (click)="closeModals()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold transition-colors"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="updatePdf()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors"
+      >
+        @if (isSubmitting()) {
+        <span>Updating...</span>
+        } @else {
+        <span>Update</span>
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Delete Confirmation Modal -->
+@if (showDeletePdfModal() && selectedPdf()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Delete PDF?</h2>
+
+    @if (errorMessage()) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ errorMessage() }}
+    </div>
+    }
+
+    <p class="text-gray-600 mb-6">
+      Are you sure you want to delete <strong>{{ selectedPdf()!.fileName }}</strong
+      >? This action cannot be undone.
+    </p>
+
+    <div class="flex gap-3">
+      <button
+        (click)="closeModals()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold transition-colors"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="deletePdf()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors"
+      >
+        @if (isSubmitting()) {
+        <span>Deleting...</span>
+        } @else {
+        <span>Delete</span>
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}

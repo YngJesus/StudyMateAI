@@ -1,0 +1,307 @@
+<div class="space-y-6">
+  <!-- Back Button & Header -->
+  <div class="flex items-center gap-4">
+    <button
+      (click)="goBack()"
+      class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+      title="Back to subjects"
+    >
+      <span class="text-2xl">←</span>
+    </button>
+
+    @if (currentSubject(); as subject) {
+    <div class="flex-1">
+      <div class="flex items-center gap-3">
+        <div
+          class="w-12 h-12 rounded-lg flex items-center justify-center text-2xl"
+          [style.background-color]="subject.color"
+        >
+          📚
+        </div>
+        <div>
+          <h1 class="text-3xl font-bold text-gray-800">{{ subject.name }}</h1>
+          <div class="flex gap-4 text-sm text-gray-600 mt-1">
+            @if (subject.professor) {
+            <span>👨‍🏫 {{ subject.professor }}</span>
+            } @if (subject.semester) {
+            <span>📅 {{ subject.semester }}</span>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button
+      (click)="openCreateCourseModal()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-colors"
+    >
+      <span class="text-xl">➕</span>
+      <span>Add Course</span>
+    </button>
+    }
+  </div>
+
+  <!-- Loading State -->
+  @if (courseService.isLoading()) {
+  <div class="flex items-center justify-center py-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+  </div>
+  }
+
+  <!-- Error Message -->
+  @if (errorMessage() && !showCreateCourseModal() && !showEditCourseModal()) {
+  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+    {{ errorMessage() }}
+  </div>
+  }
+
+  <!-- Courses List -->
+  @if (!courseService.isLoading()) { @if (courseService.courses().length > 0) {
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @for (course of courseService.courses(); track course.id) {
+    <div
+      class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 cursor-pointer group"
+      (click)="navigateToCourse(course.id)"
+    >
+      <!-- Course Icon -->
+      <div class="flex items-start justify-between mb-4">
+        <div class="text-4xl">📖</div>
+        <span class="text-xs bg-gray-100 px-2 py-1 rounded-full text-gray-600">
+          #{{ course.orderNumber + 1 }}
+        </span>
+      </div>
+
+      <!-- Course Info -->
+      <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
+        {{ course.name }}
+      </h3>
+
+      @if (course.description) {
+      <p class="text-sm text-gray-600 mb-4 line-clamp-2">
+        {{ course.description }}
+      </p>
+      } @if (course.lastStudied) {
+      <p class="text-xs text-gray-500 mb-4">
+        📅 Last studied: {{ course.lastStudied | date : 'short' }}
+      </p>
+      }
+
+      <!-- Action Buttons -->
+      <div class="flex gap-2 pt-4 border-t border-gray-200">
+        <button
+          (click)="openEditCourseModal(course); $event.stopPropagation()"
+          class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg transition-colors text-sm font-semibold"
+        >
+          ✏️ Edit
+        </button>
+        <button
+          (click)="openDeleteCourseModal(course); $event.stopPropagation()"
+          class="flex-1 bg-red-100 hover:bg-red-200 text-red-700 py-2 rounded-lg transition-colors text-sm font-semibold"
+        >
+          🗑️ Delete
+        </button>
+      </div>
+    </div>
+    }
+  </div>
+  } @else {
+  <!-- Empty State -->
+  <div class="bg-white rounded-xl shadow-md p-12 text-center">
+    <span class="text-6xl mb-4 block">📖</span>
+    <h3 class="text-2xl font-bold text-gray-800 mb-2">No courses yet</h3>
+    <p class="text-gray-600 mb-6">Start organizing your study materials by adding courses</p>
+    <button
+      (click)="openCreateCourseModal()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold"
+    >
+      Add Your First Course
+    </button>
+  </div>
+  } }
+</div>
+
+<!-- Create Course Modal -->
+@if (showCreateCourseModal()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Add New Course</h2>
+
+    @if (errorMessage()) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ errorMessage() }}
+    </div>
+    }
+
+    <div class="space-y-4">
+      <!-- Course Name -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Course Name *</label>
+        <input
+          type="text"
+          [value]="courseFormData().name"
+          (input)="updateCourseFormField('name', $any($event.target).value)"
+          placeholder="e.g., Algebra I"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Description</label>
+        <textarea
+          [value]="courseFormData().description"
+          (input)="updateCourseFormField('description', $any($event.target).value)"
+          placeholder="Brief description of the course..."
+          rows="3"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+        ></textarea>
+      </div>
+
+      <!-- Order Number -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Order Number</label>
+        <input
+          type="number"
+          [value]="courseFormData().orderNumber"
+          (input)="updateCourseFormField('orderNumber', +$any($event.target).value)"
+          min="0"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <p class="text-xs text-gray-500 mt-1">Used for sorting courses</p>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex gap-3 mt-6">
+      <button
+        (click)="closeModals()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold transition-colors"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="createCourse()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors"
+      >
+        @if (isSubmitting()) {
+        <span>Creating...</span>
+        } @else {
+        <span>Create Course</span>
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Edit Course Modal -->
+@if (showEditCourseModal() && selectedCourse()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Edit Course</h2>
+
+    @if (errorMessage()) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ errorMessage() }}
+    </div>
+    }
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Course Name *</label>
+        <input
+          type="text"
+          [value]="courseFormData().name"
+          (input)="updateCourseFormField('name', $any($event.target).value)"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Description</label>
+        <textarea
+          [value]="courseFormData().description"
+          (input)="updateCourseFormField('description', $any($event.target).value)"
+          rows="3"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+        ></textarea>
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Order Number</label>
+        <input
+          type="number"
+          [value]="courseFormData().orderNumber"
+          (input)="updateCourseFormField('orderNumber', +$any($event.target).value)"
+          min="0"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+    </div>
+
+    <div class="flex gap-3 mt-6">
+      <button
+        (click)="closeModals()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold transition-colors"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="updateCourse()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors"
+      >
+        @if (isSubmitting()) {
+        <span>Updating...</span>
+        } @else {
+        <span>Update Course</span>
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Delete Confirmation Modal -->
+@if (showDeleteCourseModal() && selectedCourse()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Delete Course?</h2>
+
+    @if (errorMessage()) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ errorMessage() }}
+    </div>
+    }
+
+    <p class="text-gray-600 mb-6">
+      Are you sure you want to delete <strong>{{ selectedCourse()!.name }}</strong
+      >? This will also delete all PDFs and materials associated with this course.
+    </p>
+
+    <div class="flex gap-3">
+      <button
+        (click)="closeModals()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold transition-colors"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="deleteCourse()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors"
+      >
+        @if (isSubmitting()) {
+        <span>Deleting...</span>
+        } @else {
+        <span>Delete Course</span>
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}
