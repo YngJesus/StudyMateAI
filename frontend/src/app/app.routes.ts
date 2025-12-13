@@ -62,6 +62,10 @@ export const routes: Routes = [
       },
     ],
   },
+  // {
+  //   path: 'subjects/:id',
+  //   loadComponent: () => import('./features/subjects/subjects/subjects').then((m) => m.Subjects),
+  // },
 
   // Wildcard route - redirect to home
   {

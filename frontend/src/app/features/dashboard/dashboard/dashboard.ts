@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit {
   }
 
   loadDashboard(): void {
-    this.http.get<DashboardStats>(`${environment.Backend}/dashboard`).subscribe({
+    this.http.get<DashboardStats>(`${environment.Backend}/api/dashboard`).subscribe({
       next: (data) => {
         this.stats.set(data);
         this.isLoading.set(false);

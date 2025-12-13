@@ -1,1 +1,296 @@
-<p>subjects works!</p>
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-800">My Subjects</h1>
+      <p class="text-gray-600 mt-1">Organize your courses and study materials</p>
+    </div>
+    <button
+      (click)="openCreateModal()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-colors"
+    >
+      <span class="text-xl">➕</span>
+      <span>Add Subject</span>
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  @if (subjectService.isLoading()) {
+  <div class="flex items-center justify-center py-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"></div>
+  </div>
+  }
+
+  <!-- Error Message -->
+  @if (errorMessage() && !showCreateModal() && !showEditModal()) {
+  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+    {{ errorMessage() }}
+  </div>
+  }
+
+  <!-- Subjects Grid -->
+  @if (!subjectService.isLoading()) { @if (subjectService.subjects().length > 0) {
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @for (subject of subjectService.subjects(); track subject.id) {
+    <div
+      class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer group"
+      [routerLink]="['/subjects', subject.id]"
+    >
+      <!-- Color Header -->
+      <div
+        class="h-24 flex items-center justify-center text-white text-4xl"
+        [style.background-color]="subject.color"
+      >
+        📚
+      </div>
+
+      <!-- Content -->
+      <div class="p-6">
+        <h3 class="text-xl font-bold text-gray-800 mb-2">{{ subject.name }}</h3>
+
+        @if (subject.professor) {
+        <p class="text-sm text-gray-600 mb-1">👨‍🏫 {{ subject.professor }}</p>
+        } @if (subject.semester) {
+        <p class="text-sm text-gray-600">📅 {{ subject.semester }}</p>
+        }
+
+        <!-- Action Buttons -->
+        <div class="flex gap-2 mt-4 pt-4 border-t border-gray-200">
+          <button
+            (click)="openEditModal(subject); $event.stopPropagation()"
+            class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg transition-colors text-sm font-semibold"
+          >
+            ✏️ Edit
+          </button>
+          <button
+            (click)="openDeleteModal(subject); $event.stopPropagation()"
+            class="flex-1 bg-red-100 hover:bg-red-200 text-red-700 py-2 rounded-lg transition-colors text-sm font-semibold"
+          >
+            🗑️ Delete
+          </button>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  } @else {
+  <!-- Empty State -->
+  <div class="bg-white rounded-xl shadow-md p-12 text-center">
+    <span class="text-6xl mb-4 block">📚</span>
+    <h3 class="text-2xl font-bold text-gray-800 mb-2">No subjects yet</h3>
+    <p class="text-gray-600 mb-6">Get started by creating your first subject</p>
+    <button
+      (click)="openCreateModal()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold"
+    >
+      Create Your First Subject
+    </button>
+  </div>
+  } }
+</div>
+
+<!-- Create Subject Modal -->
+@if (showCreateModal()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Create New Subject</h2>
+
+    @if (errorMessage()) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ errorMessage() }}
+    </div>
+    }
+
+    <div class="space-y-4">
+      <!-- Name -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Subject Name *</label>
+        <input
+          type="text"
+          [value]="formData().name"
+          (input)="updateFormField('name', $any($event.target).value)"
+          placeholder="e.g., Mathematics"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <!-- Color -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Color</label>
+        <input
+          type="color"
+          [value]="formData().color"
+          (input)="updateFormField('color', $any($event.target).value)"
+          class="w-full h-12 rounded-lg border border-gray-300 cursor-pointer"
+        />
+      </div>
+
+      <!-- Professor -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Professor</label>
+        <input
+          type="text"
+          [value]="formData().professor"
+          (input)="updateFormField('professor', $any($event.target).value)"
+          placeholder="Dr. Smith"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <!-- Semester -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Semester</label>
+        <input
+          type="text"
+          [value]="formData().semester"
+          (input)="updateFormField('semester', $any($event.target).value)"
+          placeholder="Fall 2025"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex gap-3 mt-6">
+      <button
+        (click)="closeModals()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold transition-colors"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="createSubject()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors"
+      >
+        @if (isSubmitting()) {
+        <span>Creating...</span>
+        } @else {
+        <span>Create Subject</span>
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Edit Subject Modal -->
+@if (showEditModal() && selectedSubject()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Edit Subject</h2>
+
+    @if (errorMessage()) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ errorMessage() }}
+    </div>
+    }
+
+    <div class="space-y-4">
+      <!-- Same form fields as create modal -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Subject Name *</label>
+        <input
+          type="text"
+          [value]="formData().name"
+          (input)="updateFormField('name', $any($event.target).value)"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Color</label>
+        <input
+          type="color"
+          [value]="formData().color"
+          (input)="updateFormField('color', $any($event.target).value)"
+          class="w-full h-12 rounded-lg border border-gray-300 cursor-pointer"
+        />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Professor</label>
+        <input
+          type="text"
+          [value]="formData().professor"
+          (input)="updateFormField('professor', $any($event.target).value)"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Semester</label>
+        <input
+          type="text"
+          [value]="formData().semester"
+          (input)="updateFormField('semester', $any($event.target).value)"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+    </div>
+
+    <div class="flex gap-3 mt-6">
+      <button
+        (click)="closeModals()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold transition-colors"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="updateSubject()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors"
+      >
+        @if (isSubmitting()) {
+        <span>Updating...</span>
+        } @else {
+        <span>Update Subject</span>
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Delete Confirmation Modal -->
+@if (showDeleteModal() && selectedSubject()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Delete Subject?</h2>
+
+    @if (errorMessage()) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ errorMessage() }}
+    </div>
+    }
+
+    <p class="text-gray-600 mb-6">
+      Are you sure you want to delete <strong>{{ selectedSubject()!.name }}</strong
+      >? This will also delete all courses and files associated with it.
+    </p>
+
+    <div class="flex gap-3">
+      <button
+        (click)="closeModals()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold transition-colors"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="deleteSubject()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors"
+      >
+        @if (isSubmitting()) {
+        <span>Deleting...</span>
+        } @else {
+        <span>Delete</span>
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}
