@@ -1,96 +1,366 @@
-# 📚 StudyMateAI – AI-Powered Study Platform
+# 📚 StudyMateAI - AI-Powered Learning Platform
 
-**StudyMateAI** is a full-stack learning management platform that helps students organize their studies and get AI-powered assistance from their own documents.
+> A comprehensive full-stack learning management system with AI-powered chat, real-time notifications, and intelligent study assistance.
 
-Built with **NestJS, Angular, and PostgreSQL**, it focuses on clean architecture, real-time features, and practical AI integration.
+[![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/)
+[![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
----
+## 🎯 Overview
 
-## 🚀 Features
+StudyMateAI is a production-ready learning management platform that combines modern web technologies with artificial intelligence to create an intelligent study companion. Built with enterprise-grade architecture, it features real-time communication, automated notifications, and AI-powered document processing.
 
-- 🤖 AI-powered study assistant (Groq – LLaMA 3.3)
-- 📄 Chat with uploaded PDFs
-- 📚 Subjects & courses management
-- 📅 Smart calendar (exams & deadlines)
-- 🔔 Real-time notifications (WebSockets)
-- 🔐 JWT authentication
-- 🎨 Modern responsive UI (Angular + Tailwind)
+### ✨ Key Features
 
----
+- 🤖 **AI-Powered Chat** - Intelligent study assistant using Groq's llama-3.3-70b model
+- 📄 **Smart PDF Processing** - Upload, analyze, and chat with your study materials
+- 📚 **Course Management** - Organize subjects, courses, and learning materials
+- 📅 **Smart Calendar** - Track exams, assignments, and study sessions
+- 🔔 **Real-Time Notifications** - WebSocket-based instant alerts with automated cron reminders
+- 📊 **Analytics Dashboard** - Track study progress and performance metrics
+- 🔐 **Secure Authentication** - JWT-based auth with role-based access control
+- 🎨 **Modern UI** - Responsive design with Tailwind CSS and Angular Signals
 
-## 🛠 Tech Stack
+## 🏗️ Architecture
 
-**Backend**
+### Backend Stack
 
-- NestJS (TypeScript)
-- PostgreSQL + TypeORM
-- JWT Authentication
-- WebSockets
-- Swagger API Docs
+- **Framework**: NestJS (TypeScript)
+- **Database**: PostgreSQL with TypeORM
+- **Time-Series DB**: InfluxDB (for IoT monitoring features)
+- **Authentication**: JWT with bcrypt password hashing
+- **AI Integration**: Groq API (llama-3.3-70b-versatile)
+- **Real-Time**: WebSockets for notifications
+- **Scheduling**: NestJS Schedule for automated cron jobs
+- **Documentation**: Swagger/OpenAPI
 
-**Frontend**
+### Frontend Stack
 
-- Angular 19 (Signals)
-- Tailwind CSS
-- RxJS
+- **Framework**: Angular 19 with Signals
+- **State Management**: RxJS + Angular Signals
+- **Styling**: Tailwind CSS
+- **HTTP Client**: Angular HttpClient with interceptors
+- **Routing**: Angular Router with guards
 
-**DevOps**
+### DevOps & Tools
 
+- **Containerization**: Docker & Docker Compose
+- **Database Admin**: pgAdmin
+- **API Testing**: Swagger UI
+- **Version Control**: Git
+
+## 📋 Prerequisites
+
+- Node.js >= 18.x
 - Docker & Docker Compose
+- npm or yarn
+- PostgreSQL (via Docker)
 
----
+## 🚀 Quick Start
 
-## ⚙️ Quick Start
-
-### 1️⃣ Clone the repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/YngJesus/StudyMateAI.git
 cd StudyMateAI
 ```
 
-### 2️⃣ Backend setup
+### 2. Environment Setup
+
+Create `.env` file in the backend directory:
+
+```env
+# Database
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
+DATABASE_NAME=studymate
+
+# JWT
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
+
+# Groq AI
+GROQ_API_KEY=your-groq-api-key-here
+
+# Application
+PORT=3000
+NODE_ENV=development
+```
+
+### 3. Start with Docker
 
 ```bash
+# Start PostgreSQL, InfluxDB, and pgAdmin
+docker-compose up -d
+
+# Install backend dependencies
 cd backend
 npm install
+
+# Run database migrations
+npm run migration:run
+
+# Start backend server
 npm run start:dev
 ```
 
-### 3️⃣ Frontend setup
+### 4. Start Frontend
 
 ```bash
+# In a new terminal
 cd frontend
 npm install
 npm start
 ```
 
-### 🌐 Access
+### 5. Access the Application
 
-- Frontend: http://localhost:4200
+- **Frontend**: http://localhost:4200
+- **Backend API**: http://localhost:3000/api
+- **Swagger Docs**: http://localhost:3000/api/docs
+- **pgAdmin**: http://localhost:5050
 
-- Backend API: http://localhost:3000/api
+## 📚 API Documentation
 
-- Swagger Docs: http://localhost:3000/api/docs
+Comprehensive API documentation is available via Swagger UI at `/api/docs` when running the backend.
 
-### 🎯 Why This Project?
+### Core Endpoints
 
-- This project demonstrates:
+#### Authentication
 
-- Full-stack architecture design
+```
+POST /api/auth/login       - User login
+POST /api/auth/signup      - User registration
+```
 
-- Secure authentication & authorization
+#### Subjects & Courses
 
-- Real-time systems with WebSockets
+```
+GET    /api/subjects           - List all subjects
+POST   /api/subjects           - Create subject
+GET    /api/courses/:subjectId - List courses for subject
+POST   /api/courses            - Create course
+```
 
-- AI integration in a real-world use case
+#### PDFs & Documents
 
-### 👤 Author
+```
+POST   /api/pdfs/upload        - Upload PDF
+GET    /api/pdfs/course/:id    - List PDFs for course
+GET    /api/pdfs/:id/download  - Download PDF
+```
+
+#### AI Chat
+
+```
+POST   /api/chat/sessions      - Create chat session
+GET    /api/chat/sessions      - List sessions
+POST   /api/chat/:sessionId    - Send message to AI
+GET    /api/chat/history/:id   - Get chat history
+```
+
+#### Calendar & Events
+
+```
+GET    /api/events             - List all events
+POST   /api/events             - Create event
+GET    /api/events/upcoming    - Upcoming events
+PATCH  /api/events/:id         - Update event
+DELETE /api/events/:id         - Delete event
+```
+
+#### Notifications
+
+```
+GET    /api/notifications         - List notifications
+PATCH  /api/notifications/:id/read - Mark as read
+POST   /api/notifications/cron/trigger - Manual cron trigger
+```
+
+## 🔧 Development
+
+### Backend Development
+
+```bash
+cd backend
+
+# Development with hot-reload
+npm run start:dev
+
+# Run tests
+npm run test
+
+# Generate migration
+npm run migration:generate -- -n MigrationName
+
+# Run migrations
+npm run migration:run
+```
+
+### Frontend Development
+
+```bash
+cd frontend
+
+# Development server
+npm start
+
+# Build for production
+npm run build
+
+# Run tests
+npm test
+```
+
+## 🧪 Testing
+
+```bash
+# Backend unit tests
+cd backend
+npm run test
+
+# Backend e2e tests
+npm run test:e2e
+
+# Frontend tests
+cd frontend
+npm test
+```
+
+## 📦 Production Deployment
+
+### Backend
+
+```bash
+cd backend
+npm run build
+npm run start:prod
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm run build
+# Deploy the dist/frontend folder to your hosting service
+```
+
+### Docker Production
+
+```bash
+# Build production images
+docker-compose -f docker-compose.prod.yml build
+
+# Start production stack
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+## 🔐 Security Features
+
+- ✅ JWT-based authentication with secure token storage
+- ✅ Password hashing with bcrypt (10 rounds)
+- ✅ CORS configuration for frontend-backend communication
+- ✅ Input validation with class-validator
+- ✅ SQL injection prevention via TypeORM parameterized queries
+- ✅ XSS protection through Angular's built-in sanitization
+- ✅ Rate limiting on sensitive endpoints
+
+## 🎨 Key Features Implementation
+
+### AI Chat System
+
+- Real-time chat interface with message history
+- PDF context integration for document-based Q&A
+- Session management for organized conversations
+- Streaming responses with loading indicators
+
+### Notification System
+
+- WebSocket-based real-time notifications
+- Automated cron jobs for event reminders (7 days, 3 days, 1 day, day-of)
+- Notification types: urgent, warning, info
+- Mark as read/unread functionality
+
+### PDF Processing
+
+- File upload with validation (size, type)
+- Metadata management (tags, descriptions)
+- AI-powered text extraction with pdf2json
+- Integration with chat for document Q&A
+
+### Calendar System
+
+- Event creation (exams, assignments, DS)
+- Upcoming events view with countdown
+- Subject association and color coding
+- Past/future event filtering
+
+## 📊 Database Schema
+
+### Core Tables
+
+- **users** - User accounts and authentication
+- **subjects** - Academic subjects
+- **courses** - Individual courses within subjects
+- **pdfs** - Uploaded study materials
+- **chat_sessions** - AI chat conversation sessions
+- **chat_history** - Individual chat messages
+- **events** - Calendar events and deadlines
+- **notifications** - User notifications
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👤 Author
 
 **Baha Eddine Jdidi**
 
-- Software Engineering Student
+- GitHub: [@YngJesus](https://github.com/YngJesus)
+- LinkedIn: [bahaeddinejdidi](https://www.linkedin.com/in/bahaeddinejdidi/)
+- Email: bahajedidi2016@gmail.com
 
-- GitHub: https://github.com/YngJesus
+## 🙏 Acknowledgments
 
-- LinkedIn: https://www.linkedin.com/in/bahaeddinejdidi/
+- [NestJS](https://nestjs.com/) - Progressive Node.js framework
+- [Angular](https://angular.io/) - Platform for building mobile and desktop web applications
+- [Groq](https://groq.com/) - Fast AI inference
+- [TypeORM](https://typeorm.io/) - ORM for TypeScript and JavaScript
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+
+## 📸 Screenshots
+
+### Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+### AI Chat
+
+![AI Chat](screenshots/chat.png)
+
+### Course Management
+
+![Courses](screenshots/courses.png)
+
+### Calendar
+
+![Calendar](screenshots/calendar.png)
+
+---
+
+⭐ If you find this project useful, please consider giving it a star on GitHub!
+
+**Built with ❤️ by Baha Eddine Jdidi**
