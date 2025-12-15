@@ -25,14 +25,7 @@ export class CourseService {
       tap((courses) => {
         this.courses.set(courses);
         this.isLoading.set(false);
-      }),
-      tap(
-        () => {},
-        (error) => {
-          this.isLoading.set(false);
-          throw error;
-        }
-      )
+      })
     );
   }
 

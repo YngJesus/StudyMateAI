@@ -1,1 +1,281 @@
-<p>calendar works!</p>
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-800">Calendar & Events</h1>
+      <p class="text-gray-600 mt-1">Manage your exams, assignments, and deadlines</p>
+    </div>
+    <button
+      (click)="openCreateModal()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-colors"
+    >
+      <span class="text-xl">➕</span>
+      <span>Add Event</span>
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white rounded-lg shadow-sm p-4">
+    <div class="flex gap-4 flex-wrap">
+      <button
+        (click)="selectedFilter.set('upcoming')"
+        [class.bg-blue-600]="selectedFilter() === 'upcoming'"
+        [class.text-white]="selectedFilter() === 'upcoming'"
+        [class.bg-gray-100]="selectedFilter() !== 'upcoming'"
+        class="px-4 py-2 rounded-lg transition-colors"
+      >
+        Upcoming
+      </button>
+      <button
+        (click)="selectedFilter.set('all')"
+        [class.bg-blue-600]="selectedFilter() === 'all'"
+        [class.text-white]="selectedFilter() === 'all'"
+        [class.bg-gray-100]="selectedFilter() !== 'all'"
+        class="px-4 py-2 rounded-lg transition-colors"
+      >
+        All Events
+      </button>
+      <button
+        (click)="selectedFilter.set('past')"
+        [class.bg-blue-600]="selectedFilter() === 'past'"
+        [class.text-white]="selectedFilter() === 'past'"
+        [class.bg-gray-100]="selectedFilter() !== 'past'"
+        class="px-4 py-2 rounded-lg transition-colors"
+      >
+        Past
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (eventService.isLoading()) {
+  <div class="flex justify-center items-center h-64">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+  </div>
+  }
+
+  <!-- Error Message -->
+  @if (errorMessage() && !showCreateModal() && !showEditModal()) {
+  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+    {{ errorMessage() }}
+  </div>
+  }
+
+  <!-- Events List -->
+  @if (!eventService.isLoading()) { @if (filteredEvents().length === 0) {
+  <div class="bg-white rounded-lg shadow-sm p-12 text-center">
+    <p class="text-6xl mb-4">📅</p>
+    <p class="text-gray-500 text-lg">No events found</p>
+    <button
+      (click)="openCreateModal()"
+      class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold"
+    >
+      Create Your First Event
+    </button>
+  </div>
+  } @else {
+  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    @for (event of filteredEvents(); track event.id) {
+    <div
+      class="bg-white rounded-lg shadow-sm p-6 border-l-4 hover:shadow-md transition-shadow"
+      [ngClass]="getEventColor(event.type)"
+    >
+      <!-- Event Header -->
+      <div class="flex justify-between items-start mb-3">
+        <div class="flex-1">
+          <h3 class="font-semibold text-lg text-gray-900 mb-1">{{ event.title }}</h3>
+          <span class="inline-block px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+            {{ event.type }}
+          </span>
+        </div>
+        <div class="flex gap-2">
+          <button
+            (click)="openEditModal(event)"
+            class="text-blue-600 hover:text-blue-800"
+            title="Edit"
+          >
+            ✏️
+          </button>
+          <button
+            (click)="openDeleteModal(event)"
+            class="text-red-600 hover:text-red-800"
+            title="Delete"
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
+
+      <!-- Event Details -->
+      @if (event.description) {
+      <p class="text-gray-600 text-sm mb-3">{{ event.description }}</p>
+      }
+
+      <div class="space-y-2 text-sm text-gray-600">
+        <div class="flex items-center gap-2">
+          <span>{{ getEventIcon(event.type) }}</span>
+          <span>{{ event.date | date : 'MMM d, y' }}</span>
+        </div>
+        @if (event.subject) {
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded" [style.background-color]="event.subject.color"></div>
+          <span>{{ event.subject.name }}</span>
+        </div>
+        }
+        <div class="flex items-center gap-2">
+          @if (getDaysUntil(event.date) < 0) {
+          <span class="text-gray-500">{{ Math.abs(getDaysUntil(event.date)) }} days ago</span>
+          } @else if (getDaysUntil(event.date) === 0) {
+          <span class="text-red-600 font-semibold">Today!</span>
+          } @else if (getDaysUntil(event.date) === 1) {
+          <span class="text-orange-600 font-semibold">Tomorrow</span>
+          } @else {
+          <span class="text-blue-600">In {{ getDaysUntil(event.date) }} days</span>
+          }
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  } }
+</div>
+
+<!-- Create/Edit Modal -->
+@if (showCreateModal() || showEditModal()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">
+      {{ showEditModal() ? 'Edit Event' : 'Create Event' }}
+    </h2>
+
+    @if (errorMessage()) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ errorMessage() }}
+    </div>
+    }
+
+    <div class="space-y-4">
+      <!-- Title -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Title *</label>
+        <input
+          type="text"
+          [value]="formData().title"
+          (input)="updateFormField('title', $any($event.target).value)"
+          placeholder="e.g., Math Final Exam"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <!-- Event Type -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Event Type *</label>
+        <select
+          [value]="formData().type"
+          (change)="updateFormField('type', $any($event.target).value)"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          @for (type of eventTypes; track type.value) {
+          <option [value]="type.value">{{ type.label }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Subject -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Subject *</label>
+        <select
+          [value]="formData().subjectId"
+          (change)="updateFormField('subjectId', $any($event.target).value)"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Select a subject</option>
+          @for (subject of subjectService.subjects(); track subject.id) {
+          <option [value]="subject.id">{{ subject.name }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Date -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Date *</label>
+        <input
+          type="date"
+          [value]="formData().date"
+          (input)="updateFormField('date', $any($event.target).value)"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="block text-gray-700 font-semibold mb-2">Description</label>
+        <textarea
+          [value]="formData().description"
+          (input)="updateFormField('description', $any($event.target).value)"
+          placeholder="Add notes about this event..."
+          rows="3"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex gap-3 mt-6">
+      <button
+        (click)="closeModals()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold transition-colors"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="showEditModal() ? updateEvent() : createEvent()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors"
+      >
+        @if (isSubmitting()) {
+        <span>{{ showEditModal() ? 'Updating...' : 'Creating...' }}</span>
+        } @else {
+        <span>{{ showEditModal() ? 'Update' : 'Create' }}</span>
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Delete Confirmation Modal -->
+@if (showDeleteModal() && selectedEvent()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Delete Event?</h2>
+
+    <p class="text-gray-600 mb-6">
+      Are you sure you want to delete <strong>{{ selectedEvent()!.title }}</strong
+      >? This action cannot be undone.
+    </p>
+
+    <div class="flex gap-3">
+      <button
+        (click)="closeModals()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold transition-colors"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="deleteEvent()"
+        [disabled]="isSubmitting()"
+        class="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors"
+      >
+        @if (isSubmitting()) {
+        <span>Deleting...</span>
+        } @else {
+        <span>Delete</span>
+        }
+      </button>
+    </div>
+  </div>
+</div>
+}
