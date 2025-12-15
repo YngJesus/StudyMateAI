@@ -1,188 +1,412 @@
 # 📚 StudyMateAI - AI-Powered Learning Platform
 
+<div align="center">
+
+![StudyMateAI Logo](https://img.shields.io/badge/StudyMate-AI-8b5cf6?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDYuMjUzVjE5LjI1M00xMiA2LjI1M0MxMC44MzIgNS40NzcgOS4yNDYgNSA3LjUgNVM0LjE2OCA1LjQ3NyAzIDYuMjUzVjE5LjI1M0M0LjE2OCAxOC40NzcgNS43NTQgMTggNy41IDE4UzEwLjgzMiAxOC40NzcgMTIgMTkuMjUzTTEyIDYuMjUzQzEzLjE2OCA1LjQ3NyAxNC43NTQgNSAxNi41IDVDMTguMjQ3IDUgMTkuODMyIDUuNDc3IDIxIDYuMjUzVjE5LjI1M0MxOS44MzIgMTguNDc3IDE4LjI0NyAxOCAxNi41IDE4QzE0Ljc1NCAxOCAxMy4xNjggMTguNDc3IDEyIDE5LjI1MyIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+)
+
 > A comprehensive full-stack learning management system with AI-powered chat, real-time notifications, and intelligent study assistance.
 
 [![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/)
-[![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io/)
+[![Angular](https://img.shields.io/badge/Angular_19-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+
+[Features](#-key-features) • [Installation](#-quick-start) • [API Docs](#-api-documentation) • [Contributing](#-contributing) • [License](#-license)
+
+</div>
+
+---
 
 ## 🎯 Overview
 
-StudyMateAI is a production-ready learning management platform that combines modern web technologies with artificial intelligence to create an intelligent study companion. Built with enterprise-grade architecture, it features real-time communication, automated notifications, and AI-powered document processing.
+**StudyMateAI** is a production-ready, enterprise-grade learning management platform that revolutionizes the study experience by combining cutting-edge web technologies with artificial intelligence. Built with scalability and performance in mind, it delivers real-time communication, automated intelligent notifications, and AI-powered document analysis to create the ultimate study companion.
 
 ### ✨ Key Features
 
-- 🤖 **AI-Powered Chat** - Intelligent study assistant using Groq's llama-3.3-70b model
-- 📄 **Smart PDF Processing** - Upload, analyze, and chat with your study materials
-- 📚 **Course Management** - Organize subjects, courses, and learning materials
-- 📅 **Smart Calendar** - Track exams, assignments, and study sessions
-- 🔔 **Real-Time Notifications** - WebSocket-based instant alerts with automated cron reminders
-- 📊 **Analytics Dashboard** - Track study progress and performance metrics
-- 🔐 **Secure Authentication** - JWT-based auth with role-based access control
-- 🎨 **Modern UI** - Responsive design with Tailwind CSS and Angular Signals
+#### 🤖 AI-Powered Intelligence
+
+- **Advanced Chat Assistant** - Powered by Groq's llama-3.3-70b-versatile model for intelligent, context-aware responses
+- **Document Q&A** - Chat directly with your PDF study materials using AI-powered text extraction
+- **Smart Recommendations** - Personalized study suggestions based on your progress and patterns
+
+#### 📚 Learning Management
+
+- **Subject & Course Organization** - Hierarchical structure for all your academic materials
+- **PDF Document Management** - Upload, categorize, and manage study resources with metadata tagging
+- **Progress Tracking** - Visual analytics dashboard to monitor your learning journey
+
+#### 📅 Smart Scheduling
+
+- **Intelligent Calendar** - Track exams, assignments, and study sessions with color-coded organization
+- **Automated Reminders** - Cron-based notifications at 7 days, 3 days, 1 day, and day-of events
+- **Countdown Timers** - Real-time tracking of upcoming deadlines
+
+#### 🔔 Real-Time Communication
+
+- **WebSocket Notifications** - Instant alerts for important events and updates
+- **Notification Center** - Unified inbox with read/unread status and filtering
+- **Priority Levels** - Categorized alerts (urgent, warning, info)
+
+#### 🎨 Modern User Experience
+
+- **Futuristic Dark UI** - Premium glassmorphism design with smooth animations
+- **Fully Responsive** - Optimized for desktop, tablet, and mobile devices
+- **Accessibility First** - WCAG compliant with keyboard navigation support
+
+#### 🔐 Enterprise Security
+
+- **JWT Authentication** - Secure token-based authentication with refresh tokens
+- **Role-Based Access Control** - Granular permissions for different user types
+- **Data Encryption** - Password hashing with bcrypt and secure data transmission
 
 ## 🏗️ Architecture
 
-### Backend Stack
+### Technology Stack
 
-- **Framework**: NestJS (TypeScript)
-- **Database**: PostgreSQL with TypeORM
-- **Time-Series DB**: InfluxDB (for IoT monitoring features)
-- **Authentication**: JWT with bcrypt password hashing
-- **AI Integration**: Groq API (llama-3.3-70b-versatile)
-- **Real-Time**: WebSockets for notifications
-- **Scheduling**: NestJS Schedule for automated cron jobs
-- **Documentation**: Swagger/OpenAPI
+<div align="center">
 
-### Frontend Stack
+| Layer             | Technologies                                        |
+| ----------------- | --------------------------------------------------- |
+| **Frontend**      | Angular 19, TypeScript, RxJS, Signals, Tailwind CSS |
+| **Backend**       | NestJS, Node.js, TypeScript, TypeORM                |
+| **Database**      | PostgreSQL, InfluxDB (IoT features)                 |
+| **AI/ML**         | Groq API (llama-3.3-70b-versatile), pdf2json        |
+| **Real-Time**     | WebSockets, NestJS Schedule (Cron)                  |
+| **DevOps**        | Docker, Docker Compose, pgAdmin                     |
+| **Security**      | JWT, bcrypt, CORS, class-validator                  |
+| **Documentation** | Swagger/OpenAPI                                     |
 
-- **Framework**: Angular 19 with Signals
-- **State Management**: RxJS + Angular Signals
-- **Styling**: Tailwind CSS
-- **HTTP Client**: Angular HttpClient with interceptors
-- **Routing**: Angular Router with guards
+</div>
 
-### DevOps & Tools
+### Backend Architecture
 
-- **Containerization**: Docker & Docker Compose
-- **Database Admin**: pgAdmin
-- **API Testing**: Swagger UI
-- **Version Control**: Git
+```
+backend/
+├── src/
+│   ├── modules/
+│   │   ├── auth/          # Authentication & authorization
+│   │   ├── chat/          # AI chat service & sessions
+│   │   ├── courses/       # Course management
+│   │   ├── dashboard/     # Analytics & stats
+│   │   ├── events/        # Calendar events
+│   │   ├── notifications/ # Real-time notifications
+│   │   ├── pdfs/          # Document management
+│   │   └── subjects/      # Subject organization
+│   ├── config/            # Configuration files
+│   ├── types/             # TypeScript definitions
+│   └── main.ts           # Application entry point
+└── test/                 # E2E tests
+```
+
+### Frontend Architecture
+
+```
+frontend/
+├── src/
+│   ├── app/
+│   │   ├── core/          # Services, guards, interceptors
+│   │   ├── features/      # Feature modules (lazy-loaded)
+│   │   │   ├── auth/
+│   │   │   ├── chat/
+│   │   │   ├── calendar/
+│   │   │   ├── dashboard/
+│   │   │   ├── courses/
+│   │   │   └── profile/
+│   │   └── shared/        # Shared components & utilities
+│   └── styles.css        # Global styles & design system
+└── tailwind.config.js    # Tailwind configuration
+```
 
 ## 📋 Prerequisites
 
-- Node.js >= 24.11.0
-- Docker & Docker Compose
-- npm
-- PostgreSQL (via Docker)
+Before you begin, ensure you have the following installed:
+
+- **Node.js** >= 24.11.0 ([Download](https://nodejs.org/))
+- **npm** >= 10.0.0 (comes with Node.js)
+- **Docker** >= 20.10.0 ([Download](https://www.docker.com/))
+- **Docker Compose** >= 2.0.0
+- **Git** ([Download](https://git-scm.com/))
+
+Optional but recommended:
+
+- **pgAdmin** (included in Docker Compose)
+- **Postman** or **Insomnia** for API testing
 
 ## 🚀 Quick Start
 
-### 1. Clone the Repository
+### 1️⃣ Clone the Repository
 
 ```bash
 git clone https://github.com/YngJesus/StudyMateAI.git
 cd StudyMateAI
 ```
 
-### 2. Environment Setup
+### 2️⃣ Environment Configuration
 
-Create `.env` file in the backend directory:
+Create a `.env` file in the `backend` directory:
 
 ```env
-# Database
+# Database Configuration
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
 DATABASE_USER=postgres
 DATABASE_PASSWORD=postgres
 DATABASE_NAME=studymate
 
-# JWT
-JWT_SECRET=your-super-secret-jwt-key-change-in-production
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key-change-in-production-min-32-chars
+JWT_EXPIRES_IN=7d
 
-# Groq AI
+# Groq AI Configuration
 GROQ_API_KEY=your-groq-api-key-here
+GROQ_MODEL=llama-3.3-70b-versatile
 
-# Application
+# Application Configuration
 PORT=3000
 NODE_ENV=development
+CORS_ORIGIN=http://localhost:4200
+
+# File Upload Configuration
+MAX_FILE_SIZE=10485760  # 10MB in bytes
+UPLOAD_PATH=./uploads
 ```
 
-### 3. Start with Docker
+> 💡 **Tip**: Get your free Groq API key at [console.groq.com](https://console.groq.com/)
+
+### 3️⃣ Start Docker Services
 
 ```bash
 # Start PostgreSQL and pgAdmin
 docker-compose up -d
 
-# Install backend dependencies
+# Verify services are running
+docker-compose ps
+```
+
+### 4️⃣ Backend Setup
+
+```bash
 cd backend
+
+# Install dependencies
 npm install
 
 # Run database migrations
 npm run migration:run
 
-# Start backend server
+# Seed initial data (optional)
+npm run seed
+
+# Start development server
 npm run start:dev
 ```
 
-### 4. Start Frontend
+The backend will be available at `http://localhost:3000`
+
+### 5️⃣ Frontend Setup
 
 ```bash
-# In a new terminal
+# Open a new terminal
 cd frontend
+
+# Install dependencies
 npm install
+
+# Start development server
 npm start
 ```
 
-### 5. Access the Application
+The frontend will be available at `http://localhost:4200`
 
-- **Frontend**: http://localhost:4200
-- **Backend API**: http://localhost:3000/api
-- **Swagger Docs**: http://localhost:3000/api/docs
-- **pgAdmin**: http://localhost:5050
+### 6️⃣ Access the Application
+
+| Service          | URL                            | Credentials               |
+| ---------------- | ------------------------------ | ------------------------- |
+| **Frontend App** | http://localhost:4200          | Create account via signup |
+| **Backend API**  | http://localhost:3000/api      | -                         |
+| **Swagger Docs** | http://localhost:3000/api/docs | -                         |
+| **pgAdmin**      | http://localhost:5050          | admin@admin.com / admin   |
+
+### 7️⃣ Default Test Account (After Seeding)
+
+```
+Email: test@studymate.com
+Password: Test123!
+```
 
 ## 📚 API Documentation
 
-Comprehensive API documentation is available via Swagger UI at `/api/docs` when running the backend.
+### Interactive Documentation
 
-### Core Endpoints
+Comprehensive API documentation is available via **Swagger UI** at:
 
-#### Authentication
+- **Development**: http://localhost:3000/api/docs
+- **Production**: https://your-domain.com/api/docs
 
-```
-POST /api/auth/login       - User login
-POST /api/auth/signup      - User registration
-```
+### Authentication
 
-#### Subjects & Courses
+All protected endpoints require a JWT token in the Authorization header:
 
-```
-GET    /api/subjects           - List all subjects
-POST   /api/subjects           - Create subject
-GET    /api/courses/:subjectId - List courses for subject
-POST   /api/courses            - Create course
+```http
+Authorization: Bearer <your-jwt-token>
 ```
 
-#### PDFs & Documents
+### API Endpoints Overview
 
-```
-POST   /api/pdfs/upload        - Upload PDF
-GET    /api/pdfs/course/:id    - List PDFs for course
-GET    /api/pdfs/:id/download  - Download PDF
-```
+<details>
+<summary><b>🔐 Authentication</b></summary>
 
-#### AI Chat
-
-```
-POST   /api/chat/sessions      - Create chat session
-GET    /api/chat/sessions      - List sessions
-POST   /api/chat/:sessionId    - Send message to AI
-GET    /api/chat/history/:id   - Get chat history
+```http
+POST   /api/auth/signup          # Register new user
+POST   /api/auth/login           # Login user
+POST   /api/auth/refresh         # Refresh access token
+GET    /api/auth/profile         # Get current user
+PATCH  /api/auth/profile         # Update profile
 ```
 
-#### Calendar & Events
+**Example Request:**
 
-```
-GET    /api/events             - List all events
-POST   /api/events             - Create event
-GET    /api/events/upcoming    - Upcoming events
-PATCH  /api/events/:id         - Update event
-DELETE /api/events/:id         - Delete event
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@example.com","password":"password123"}'
 ```
 
-#### Notifications
+</details>
 
+<details>
+<summary><b>📚 Subjects & Courses</b></summary>
+
+```http
+GET    /api/subjects              # List all subjects
+POST   /api/subjects              # Create new subject
+GET    /api/subjects/:id          # Get subject details
+PATCH  /api/subjects/:id          # Update subject
+DELETE /api/subjects/:id          # Delete subject
+
+GET    /api/courses               # List all courses
+POST   /api/courses               # Create new course
+GET    /api/courses/:id           # Get course details
+GET    /api/courses/subject/:id   # Get courses by subject
+PATCH  /api/courses/:id           # Update course
+DELETE /api/courses/:id           # Delete course
 ```
-GET    /api/notifications         - List notifications
-PATCH  /api/notifications/:id/read - Mark as read
-POST   /api/notifications/cron/trigger - Manual cron trigger
+
+</details>
+
+<details>
+<summary><b>📄 PDF Management</b></summary>
+
+```http
+POST   /api/pdfs/upload           # Upload PDF document
+GET    /api/pdfs                  # List all PDFs
+GET    /api/pdfs/:id              # Get PDF details
+GET    /api/pdfs/course/:id       # Get PDFs by course
+GET    /api/pdfs/:id/download     # Download PDF
+PATCH  /api/pdfs/:id              # Update PDF metadata
+DELETE /api/pdfs/:id              # Delete PDF
 ```
+
+**Upload Example:**
+
+```bash
+curl -X POST http://localhost:3000/api/pdfs/upload \
+  -H "Authorization: Bearer <token>" \
+  -F "file=@document.pdf" \
+  -F "courseId=123" \
+  -F "tags=exam,chapter1"
+```
+
+</details>
+
+<details>
+<summary><b>🤖 AI Chat</b></summary>
+
+```http
+GET    /api/chat/sessions         # List all chat sessions
+POST   /api/chat/sessions         # Create new session
+GET    /api/chat/sessions/:id     # Get session details
+PATCH  /api/chat/sessions/:id     # Update session title
+DELETE /api/chat/sessions/:id     # Delete session
+
+GET    /api/chat/history/:id      # Get chat messages
+POST   /api/chat/:sessionId       # Send message to AI
+DELETE /api/chat/message/:id      # Delete message
+```
+
+**Chat Request:**
+
+```json
+{
+  "message": "Explain quantum physics",
+  "pdfId": "optional-pdf-id-for-context"
+}
+```
+
+</details>
+
+<details>
+<summary><b>📅 Calendar & Events</b></summary>
+
+```http
+GET    /api/events                # List all events
+POST   /api/events                # Create event
+GET    /api/events/:id            # Get event details
+GET    /api/events/upcoming       # Get upcoming events
+GET    /api/events/past           # Get past events
+PATCH  /api/events/:id            # Update event
+DELETE /api/events/:id            # Delete event
+```
+
+**Event Types:**
+
+- `exam` - Examinations
+- `assignment` - Assignments and homework
+- `ds` - Directed Study sessions
+</details>
+
+<details>
+<summary><b>🔔 Notifications</b></summary>
+
+```http
+GET    /api/notifications                  # List all notifications
+GET    /api/notifications/unread           # Get unread notifications
+PATCH  /api/notifications/:id/read         # Mark as read
+PATCH  /api/notifications/read-all         # Mark all as read
+DELETE /api/notifications/:id              # Delete notification
+POST   /api/notifications/cron/trigger     # Manual cron trigger (dev)
+```
+
+**WebSocket Connection:**
+
+```javascript
+const socket = io("http://localhost:3000", {
+  auth: { token: "your-jwt-token" },
+});
+
+socket.on("notification", (data) => {
+  console.log("New notification:", data);
+});
+```
+
+</details>
+
+<details>
+<summary><b>📊 Dashboard</b></summary>
+
+```http
+GET    /api/dashboard/stats       # Get overview statistics
+GET    /api/dashboard/activity    # Get recent activity
+GET    /api/dashboard/upcoming    # Get upcoming events
+```
+
+</details>
 
 ## 🔧 Development
 
-### Backend Development
+### Backend Development Commands
 
 ```bash
 cd backend
@@ -190,136 +414,689 @@ cd backend
 # Development with hot-reload
 npm run start:dev
 
-# Run tests
+# Production build
+npm run build
+
+# Production mode
+npm run start:prod
+
+# Run unit tests
 npm run test
 
-# Generate migration
-npm run migration:generate -- -n MigrationName
+# Run e2e tests
+npm run test:e2e
 
-# Run migrations
-npm run migration:run
+# Test coverage
+npm run test:cov
+
+# Linting
+npm run lint
+
+# Format code
+npm run format
 ```
 
-### Frontend Development
+### Database Migrations
+
+```bash
+# Generate new migration
+npm run migration:generate -- -n MigrationName
+
+# Create empty migration
+npm run migration:create -- -n MigrationName
+
+# Run pending migrations
+npm run migration:run
+
+# Revert last migration
+npm run migration:revert
+
+# Show migration status
+npm run migration:show
+```
+
+### Frontend Development Commands
 
 ```bash
 cd frontend
 
-# Development server
+# Development server (http://localhost:4200)
 npm start
 
-# Build for production
+# Production build
 npm run build
 
-# Run tests
+# Build with AOT compilation
+npm run build:prod
+
+# Run unit tests
 npm test
+
+# Run e2e tests
+npm run e2e
+
+# Linting
+npm run lint
+
+# Code formatting
+npm run format
+```
+
+### Code Quality Tools
+
+```bash
+# Run all checks before commit
+npm run pre-commit
+
+# Type checking
+npm run type-check
+
+# Bundle analysis
+npm run analyze
 ```
 
 ## 🧪 Testing
 
-```bash
-# Backend unit tests
-cd backend
-npm run test
+### Backend Testing
 
-# Backend e2e tests
+```bash
+cd backend
+
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run e2e tests
 npm run test:e2e
 
-# Frontend tests
+# Generate coverage report
+npm run test:cov
+
+# Run specific test file
+npm test -- auth.service.spec.ts
+```
+
+### Frontend Testing
+
+```bash
 cd frontend
+
+# Run unit tests
 npm test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run e2e tests
+npm run e2e
+
+# Run tests in headless mode
+npm run test:ci
+```
+
+### Test Structure
+
+```
+backend/
+├── src/
+│   └── **/*.spec.ts        # Unit tests
+└── test/
+    └── **/*.e2e-spec.ts    # E2E tests
+
+frontend/
+└── src/
+    └── **/*.spec.ts        # Component tests
 ```
 
 ## 📦 Production Deployment
 
-### Backend
+### Environment Variables for Production
+
+```env
+# Backend .env.production
+NODE_ENV=production
+PORT=3000
+DATABASE_HOST=your-db-host
+DATABASE_PORT=5432
+DATABASE_USER=your-db-user
+DATABASE_PASSWORD=your-secure-password
+DATABASE_NAME=studymate_prod
+DATABASE_SSL=true
+
+JWT_SECRET=your-very-secure-jwt-secret-min-64-chars
+JWT_EXPIRES_IN=7d
+
+GROQ_API_KEY=your-production-groq-key
+GROQ_MODEL=llama-3.3-70b-versatile
+
+CORS_ORIGIN=https://your-frontend-domain.com
+```
+
+### Backend Deployment
+
+#### Option 1: Traditional Server
 
 ```bash
 cd backend
+
+# Install production dependencies only
+npm ci --production
+
+# Build the application
 npm run build
-npm run start:prod
+
+# Run database migrations
+npm run migration:run
+
+# Start with PM2
+pm2 start dist/main.js --name studymate-api
+
+# Enable auto-restart on boot
+pm2 startup
+pm2 save
 ```
 
-### Frontend
+#### Option 2: Docker
+
+```bash
+# Build production image
+docker build -t studymate-backend:latest ./backend
+
+# Run container
+docker run -d \
+  --name studymate-api \
+  -p 3000:3000 \
+  --env-file .env.production \
+  studymate-backend:latest
+```
+
+### Frontend Deployment
 
 ```bash
 cd frontend
-npm run build
-# Deploy the dist/frontend folder to your hosting service
+
+# Build for production with AOT
+npm run build:prod
+
+# Output will be in dist/frontend/browser
 ```
 
-### Docker Production
+#### Deploy to Popular Platforms
+
+<details>
+<summary><b>Vercel</b></summary>
 
 ```bash
-# Build production images
-docker-compose -f docker-compose.prod.yml build
+# Install Vercel CLI
+npm i -g vercel
 
-# Start production stack
-docker-compose -f docker-compose.prod.yml up -d
+# Deploy
+cd frontend
+vercel --prod
 ```
+
+</details>
+
+<details>
+<summary><b>Netlify</b></summary>
+
+```bash
+# Install Netlify CLI
+npm i -g netlify-cli
+
+# Deploy
+cd frontend
+npm run build:prod
+netlify deploy --prod --dir=dist/frontend/browser
+```
+
+</details>
+
+<details>
+<summary><b>AWS S3 + CloudFront</b></summary>
+
+```bash
+# Build
+npm run build:prod
+
+# Sync to S3
+aws s3 sync dist/frontend/browser s3://your-bucket-name
+
+# Invalidate CloudFront cache
+aws cloudfront create-invalidation \
+  --distribution-id YOUR_DIST_ID \
+  --paths "/*"
+```
+
+</details>
+
+### Docker Compose Production
+
+```bash
+# Build and start all services
+docker-compose -f docker-compose.prod.yml up -d
+
+# View logs
+docker-compose -f docker-compose.prod.yml logs -f
+
+# Stop services
+docker-compose -f docker-compose.prod.yml down
+```
+
+### Health Checks
+
+```bash
+# Check backend health
+curl http://your-domain.com/api/health
+
+# Check database connection
+curl http://your-domain.com/api/health/db
+```
+
+### Performance Optimization
+
+- ✅ Enable HTTP/2
+- ✅ Configure CDN for static assets
+- ✅ Enable gzip/brotli compression
+- ✅ Set up database connection pooling
+- ✅ Configure Redis for session storage (optional)
+- ✅ Set up load balancing for multiple instances
+- ✅ Enable database query caching
 
 ## 🔐 Security Features
 
-- ✅ JWT-based authentication with secure token storage
-- ✅ Password hashing with bcrypt (10 rounds)
-- ✅ CORS configuration for frontend-backend communication
-- ✅ Input validation with class-validator
-- ✅ SQL injection prevention via TypeORM parameterized queries
-- ✅ XSS protection through Angular's built-in sanitization
-- ✅ Rate limiting on sensitive endpoints
+### Authentication & Authorization
+
+- ✅ **JWT-based authentication** with secure token storage and refresh mechanism
+- ✅ **Password hashing** using bcrypt with 10 salt rounds
+- ✅ **Role-based access control (RBAC)** for fine-grained permissions
+- ✅ **HTTP-only cookies** for token storage (optional configuration)
+- ✅ **Session management** with automatic token expiration
+
+### Data Protection
+
+- ✅ **SQL injection prevention** via TypeORM parameterized queries
+- ✅ **XSS protection** through Angular's built-in sanitization
+- ✅ **CSRF protection** with token validation
+- ✅ **Input validation** using class-validator and DTOs
+- ✅ **File upload validation** (type, size, content verification)
+- ✅ **Rate limiting** on sensitive endpoints
+- ✅ **CORS configuration** with whitelist support
+
+### Network Security
+
+- ✅ **HTTPS enforcement** in production
+- ✅ **Helmet.js integration** for security headers
+- ✅ **Content Security Policy (CSP)** headers
+- ✅ **Secure WebSocket connections** with authentication
+
+### Best Practices Implemented
+
+- 🔒 Environment variables for sensitive data
+- 🔒 Secrets rotation capabilities
+- 🔒 Audit logging for critical operations
+- 🔒 Regular dependency updates via Dependabot
+- 🔒 Security vulnerability scanning
 
 ## 🎨 Key Features Implementation
 
-### AI Chat System
+### 🤖 AI Chat System
 
-- Real-time chat interface with message history
-- PDF context integration for document-based Q&A
+**Advanced Conversational AI**
+
+- Real-time chat interface with message history persistence
+- Context-aware responses using Groq's llama-3.3-70b-versatile model
+- PDF document integration for context-based Q&A
 - Session management for organized conversations
-- Streaming responses with loading indicators
+- Message editing and deletion capabilities
+- Typing indicators and loading states
+- Export chat history functionality
 
-### Notification System
+**Technical Highlights:**
 
-- WebSocket-based real-time notifications
-- Automated cron jobs for event reminders (7 days, 3 days, 1 day, day-of)
-- Notification types: urgent, warning, info
-- Mark as read/unread functionality
+```typescript
+// AI-powered response with PDF context
+const response = await chatService.sendMessage({
+  sessionId: "session-id",
+  message: "Explain this concept",
+  pdfId: "optional-pdf-for-context",
+});
+```
 
-### PDF Processing
+### 🔔 Notification System
 
-- File upload with validation (size, type)
-- Metadata management (tags, descriptions)
-- AI-powered text extraction with pdf2json
-- Integration with chat for document Q&A
+**Real-Time Communication**
 
-### Calendar System
+- **WebSocket Integration**: Instant bi-directional communication
+- **Smart Notifications**: Automated cron jobs for event reminders
+  - 7 days before event
+  - 3 days before event
+  - 1 day before event
+  - Day of event
+- **Priority Categorization**: Urgent, Warning, Info levels
+- **Notification Center**: Unified inbox with filtering
+- **Mark as Read/Unread**: Track notification status
+- **Desktop Notifications**: Browser notification API integration
 
-- Event creation (exams, assignments, DS)
-- Upcoming events view with countdown
-- Subject association and color coding
-- Past/future event filtering
+**Cron Schedule:**
+
+```typescript
+@Cron('0 0 9 * * *') // Daily at 9 AM
+async sendEventReminders() {
+  // Checks upcoming events and sends notifications
+}
+```
+
+### 📄 PDF Processing
+
+**Intelligent Document Management**
+
+- **File Upload**: Drag-and-drop with validation
+  - Supported formats: PDF
+  - Max size: 10MB (configurable)
+  - Automatic virus scanning
+- **Metadata Management**: Tags, descriptions, categories
+- **AI Text Extraction**: Using pdf2json for parsing
+- **Search & Filter**: Full-text search capabilities
+- **Version Control**: Track document versions
+- **Access Control**: Permission-based document sharing
+
+**AI Integration:**
+
+```typescript
+// Chat with PDF content
+const answer = await aiService.queryDocument({
+  pdfId: "doc-id",
+  question: "What are the key points in chapter 3?",
+});
+```
+
+### 📅 Calendar System
+
+**Smart Event Management**
+
+- **Event Types**: Exams, Assignments, DS (Directed Study)
+- **Color Coding**: Visual organization by subject
+- **Countdown Timers**: Real-time tracking of upcoming deadlines
+- **Recurring Events**: Support for repeating schedules
+- **Calendar Views**: Day, week, month, and agenda views
+- **Import/Export**: iCal format support
+- **Reminders**: Automated notifications integration
+
+**Features:**
+
+- Drag-and-drop event rescheduling
+- Quick event creation with keyboard shortcuts
+- Event filtering by type, subject, date range
+- Past event archiving
+
+### 📊 Analytics Dashboard
+
+**Comprehensive Study Insights**
+
+- **Study Statistics**: Total hours, subjects, progress
+- **Performance Metrics**: Test scores, assignment completion
+- **Activity Timeline**: Recent actions and milestones
+- **Visual Charts**: Progress graphs and trend analysis
+- **Goal Tracking**: Set and monitor study objectives
+- **Recommendations**: AI-powered study suggestions
 
 ## 📊 Database Schema
 
+### Entity Relationship Diagram
+
+```
+┌─────────────┐       ┌──────────────┐       ┌─────────────┐
+│    Users    │──────<│   Subjects   │──────<│   Courses   │
+└─────────────┘       └──────────────┘       └─────────────┘
+      │                                              │
+      │                                              │
+      ├──────────────────────┐                      │
+      │                      │                      │
+      ▼                      ▼                      ▼
+┌─────────────┐       ┌──────────────┐       ┌─────────────┐
+│   Events    │       │ChatSessions  │       │    PDFs     │
+└─────────────┘       └──────────────┘       └─────────────┘
+                             │
+                             │
+                             ▼
+                      ┌──────────────┐
+                      │ ChatHistory  │
+                      └──────────────┘
+      ▲
+      │
+      │
+┌─────────────┐
+│Notifications│
+└─────────────┘
+```
+
 ### Core Tables
 
-- **users** - User accounts and authentication
-- **subjects** - Academic subjects
-- **courses** - Individual courses within subjects
-- **pdfs** - Uploaded study materials
-- **chat_sessions** - AI chat conversation sessions
-- **chat_history** - Individual chat messages
-- **events** - Calendar events and deadlines
-- **notifications** - User notifications
+#### **users**
+
+| Column    | Type      | Description                |
+| --------- | --------- | -------------------------- |
+| id        | UUID      | Primary key                |
+| email     | VARCHAR   | Unique email address       |
+| password  | VARCHAR   | Hashed password (bcrypt)   |
+| fullName  | VARCHAR   | User's full name           |
+| role      | ENUM      | User role (admin, student) |
+| createdAt | TIMESTAMP | Account creation date      |
+| updatedAt | TIMESTAMP | Last update timestamp      |
+
+#### **subjects**
+
+| Column    | Type      | Description           |
+| --------- | --------- | --------------------- |
+| id        | UUID      | Primary key           |
+| name      | VARCHAR   | Subject name          |
+| color     | VARCHAR   | Hex color code for UI |
+| userId    | UUID      | Foreign key to users  |
+| createdAt | TIMESTAMP | Creation timestamp    |
+
+#### **courses**
+
+| Column      | Type      | Description             |
+| ----------- | --------- | ----------------------- |
+| id          | UUID      | Primary key             |
+| name        | VARCHAR   | Course name             |
+| description | TEXT      | Course description      |
+| subjectId   | UUID      | Foreign key to subjects |
+| createdAt   | TIMESTAMP | Creation timestamp      |
+
+#### **pdfs**
+
+| Column     | Type      | Description            |
+| ---------- | --------- | ---------------------- |
+| id         | UUID      | Primary key            |
+| fileName   | VARCHAR   | Original file name     |
+| filePath   | VARCHAR   | Storage path           |
+| fileSize   | INTEGER   | File size in bytes     |
+| courseId   | UUID      | Foreign key to courses |
+| tags       | JSON      | Metadata tags array    |
+| uploadedAt | TIMESTAMP | Upload timestamp       |
+
+#### **chat_sessions**
+
+| Column    | Type      | Description            |
+| --------- | --------- | ---------------------- |
+| id        | UUID      | Primary key            |
+| title     | VARCHAR   | Session title          |
+| userId    | UUID      | Foreign key to users   |
+| createdAt | TIMESTAMP | Creation timestamp     |
+| updatedAt | TIMESTAMP | Last message timestamp |
+
+#### **chat_history**
+
+| Column    | Type      | Description                  |
+| --------- | --------- | ---------------------------- |
+| id        | UUID      | Primary key                  |
+| sessionId | UUID      | Foreign key to chat_sessions |
+| message   | TEXT      | User message                 |
+| response  | TEXT      | AI response                  |
+| pdfId     | UUID      | Optional PDF context         |
+| createdAt | TIMESTAMP | Message timestamp            |
+
+#### **events**
+
+| Column      | Type      | Description             |
+| ----------- | --------- | ----------------------- |
+| id          | UUID      | Primary key             |
+| title       | VARCHAR   | Event title             |
+| type        | ENUM      | exam, assignment, ds    |
+| date        | DATE      | Event date              |
+| description | TEXT      | Event details           |
+| subjectId   | UUID      | Foreign key to subjects |
+| userId      | UUID      | Foreign key to users    |
+| createdAt   | TIMESTAMP | Creation timestamp      |
+
+#### **notifications**
+
+| Column    | Type      | Description            |
+| --------- | --------- | ---------------------- |
+| id        | UUID      | Primary key            |
+| userId    | UUID      | Foreign key to users   |
+| title     | VARCHAR   | Notification title     |
+| message   | TEXT      | Notification content   |
+| type      | ENUM      | urgent, warning, info  |
+| isRead    | BOOLEAN   | Read status            |
+| eventId   | UUID      | Optional related event |
+| createdAt | TIMESTAMP | Creation timestamp     |
+
+### Indexes
+
+```sql
+-- Performance optimization indexes
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_subjects_userId ON subjects(userId);
+CREATE INDEX idx_courses_subjectId ON courses(subjectId);
+CREATE INDEX idx_pdfs_courseId ON pdfs(courseId);
+CREATE INDEX idx_events_userId_date ON events(userId, date);
+CREATE INDEX idx_notifications_userId_isRead ON notifications(userId, isRead);
+CREATE INDEX idx_chat_sessions_userId ON chat_sessions(userId);
+CREATE INDEX idx_chat_history_sessionId ON chat_history(sessionId);
+```
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
+We welcome contributions from the community! Here's how you can help make StudyMateAI better:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+### 🌟 Ways to Contribute
+
+- 🐛 Report bugs and issues
+- 💡 Suggest new features or enhancements
+- 📝 Improve documentation
+- 🔧 Submit pull requests
+- 🎨 Enhance UI/UX design
+- 🌍 Add translations
+
+### 📋 Contribution Guidelines
+
+1. **Fork the Repository**
+
+   ```bash
+   git clone https://github.com/YourUsername/StudyMateAI.git
+   cd StudyMateAI
+   ```
+
+2. **Create a Feature Branch**
+
+   ```bash
+   git checkout -b feature/AmazingFeature
+   ```
+
+3. **Make Your Changes**
+
+   - Follow the existing code style
+   - Write meaningful commit messages
+   - Add tests for new features
+   - Update documentation as needed
+
+4. **Test Your Changes**
+
+   ```bash
+   # Backend tests
+   cd backend && npm test
+
+   # Frontend tests
+   cd frontend && npm test
+   ```
+
+5. **Commit Your Changes**
+
+   ```bash
+   git add .
+   git commit -m 'feat: Add some AmazingFeature'
+   ```
+
+   **Commit Message Convention:**
+
+   - `feat:` New feature
+   - `fix:` Bug fix
+   - `docs:` Documentation changes
+   - `style:` Code style changes (formatting)
+   - `refactor:` Code refactoring
+   - `test:` Adding tests
+   - `chore:` Maintenance tasks
+
+6. **Push to Your Fork**
+
+   ```bash
+   git push origin feature/AmazingFeature
+   ```
+
+7. **Open a Pull Request**
+   - Provide a clear description of changes
+   - Link related issues
+   - Add screenshots for UI changes
+   - Ensure all tests pass
+
+### 🔍 Code Review Process
+
+1. Maintainer reviews the PR
+2. Automated tests must pass
+3. At least one approval required
+4. Changes may be requested
+5. Once approved, PR will be merged
+
+### 📜 Code of Conduct
+
+- Be respectful and inclusive
+- Provide constructive feedback
+- Focus on the code, not the person
+- Help others learn and grow
+
+### 🐛 Reporting Bugs
+
+When reporting bugs, please include:
+
+- **Description**: Clear description of the issue
+- **Steps to Reproduce**: Detailed steps
+- **Expected Behavior**: What should happen
+- **Actual Behavior**: What actually happens
+- **Screenshots**: If applicable
+- **Environment**:
+  - OS: [e.g., Windows 11, macOS 14]
+  - Node.js version
+  - Browser version (for frontend issues)
+  - Docker version (if applicable)
+
+### 💡 Feature Requests
+
+When suggesting features:
+
+- Describe the problem it solves
+- Explain the proposed solution
+- Provide examples or mockups
+- Consider implementation complexity
+
+### 📧 Questions?
+
+- Open a [GitHub Discussion](https://github.com/YngJesus/StudyMateAI/discussions)
+- Email: bahajedidi2016@gmail.com
 
 ## 📝 License
 
@@ -343,24 +1120,272 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📸 Screenshots
 
-### Dashboard
+### 🌟 Modern Dark UI
+
+<div align="center">
+
+#### Dashboard - Overview & Analytics
 
 ![Dashboard](screenshots/dashboard.png)
+_Real-time statistics, quick actions, and activity feed_
 
-### AI Chat
+#### AI Chat - Intelligent Study Assistant
 
 ![AI Chat](screenshots/chat.png)
+_Context-aware AI conversations with PDF integration_
 
-### Course Management
+#### Course Management - Organized Learning
 
 ![Courses](screenshots/courses.png)
+_Subject hierarchy and course organization_
 
-### Calendar
+#### Calendar - Smart Event Tracking
 
 ![Calendar](screenshots/calendar.png)
+_Event management with automated reminders_
+
+#### Login - Secure Authentication
+
+![Login](screenshots/login.png)
+_Premium glassmorphism design with JWT authentication_
+
+#### Profile - User Management
+
+![Profile](screenshots/profile.png)
+_Account settings and personalization_
+
+</div>
 
 ---
 
-⭐ If you find this project useful, please consider giving it a star on GitHub!
+## 🚀 Roadmap
 
-**Built with ❤️ by Baha Eddine Jdidi**
+### Version 1.1 (Q1 2026)
+
+- [ ] Mobile app (React Native)
+- [ ] Offline mode support
+- [ ] Advanced analytics dashboard
+- [ ] Study group collaboration
+- [ ] Video conferencing integration
+
+### Version 1.2 (Q2 2026)
+
+- [ ] Spaced repetition flashcards
+- [ ] AI-powered study plan generation
+- [ ] Progress sharing with mentors
+- [ ] Multi-language support
+- [ ] Dark/Light theme toggle
+
+### Version 2.0 (Q3 2026)
+
+- [ ] Voice-to-text note taking
+- [ ] AI lecture summarization
+- [ ] Interactive whiteboard
+- [ ] Gamification features
+- [ ] Third-party integrations (Google Calendar, Zoom)
+
+---
+
+## 🆘 Troubleshooting
+
+### Common Issues
+
+<details>
+<summary><b>❌ Database connection failed</b></summary>
+
+**Problem:** Cannot connect to PostgreSQL
+
+**Solution:**
+
+```bash
+# Check if Docker containers are running
+docker-compose ps
+
+# Restart PostgreSQL
+docker-compose restart postgres
+
+# Check logs
+docker-compose logs postgres
+```
+
+</details>
+
+<details>
+<summary><b>❌ Port already in use</b></summary>
+
+**Problem:** Port 3000 or 4200 already in use
+
+**Solution:**
+
+```bash
+# Find process using port (Windows)
+netstat -ano | findstr :3000
+
+# Kill process (replace PID)
+taskkill /PID <PID> /F
+
+# Or change port in .env and angular.json
+```
+
+</details>
+
+<details>
+<summary><b>❌ CORS errors</b></summary>
+
+**Problem:** CORS policy blocking requests
+
+**Solution:**
+
+1. Check `CORS_ORIGIN` in `.env`
+2. Ensure frontend URL matches
+3. Restart backend server
+</details>
+
+<details>
+<summary><b>❌ Groq API errors</b></summary>
+
+**Problem:** AI chat not working
+
+**Solution:**
+
+1. Verify `GROQ_API_KEY` is set
+2. Check API key validity at console.groq.com
+3. Review API rate limits
+4. Check backend logs for error details
+</details>
+
+<details>
+<summary><b>❌ File upload fails</b></summary>
+
+**Problem:** Cannot upload PDFs
+
+**Solution:**
+
+1. Check file size (max 10MB by default)
+2. Verify `uploads` directory exists and has write permissions
+3. Check `MAX_FILE_SIZE` in `.env`
+
+```bash
+mkdir -p backend/uploads/PDFs
+chmod 755 backend/uploads
+```
+
+</details>
+
+### Getting Help
+
+- 📚 Check the [Wiki](https://github.com/YngJesus/StudyMateAI/wiki)
+- 💬 Join [Discussions](https://github.com/YngJesus/StudyMateAI/discussions)
+- 🐛 Report [Issues](https://github.com/YngJesus/StudyMateAI/issues)
+- 📧 Email: bahajedidi2016@gmail.com
+
+---
+
+## 📝 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+### MIT License Summary
+
+```
+Copyright (c) 2025 Baha Eddine Jdidi
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+```
+
+---
+
+## 👤 Author
+
+<div align="center">
+
+### Baha Eddine Jdidi
+
+**Full-Stack Developer | AI Enthusiast | Open Source Contributor**
+
+[![GitHub](https://img.shields.io/badge/GitHub-@YngJesus-181717?style=for-the-badge&logo=github)](https://github.com/YngJesus)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-bahaeddinejdidi-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/bahaeddinejdidi/)
+[![Email](https://img.shields.io/badge/Email-bahajedidi2016@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:bahajedidi2016@gmail.com)
+
+---
+
+### 💼 Portfolio & Projects
+
+Check out my other projects:
+
+- 🔗 [Portfolio Website](https://github.com/YngJesus)
+- 💻 [More Projects](https://github.com/YngJesus?tab=repositories)
+
+</div>
+
+---
+
+## 🙏 Acknowledgments
+
+Special thanks to the amazing open-source community and these fantastic technologies:
+
+### Frameworks & Libraries
+
+- **[NestJS](https://nestjs.com/)** - Progressive Node.js framework for building efficient server-side applications
+- **[Angular](https://angular.io/)** - Platform and framework for building single-page client applications
+- **[TypeORM](https://typeorm.io/)** - ORM for TypeScript and JavaScript (ES7, ES6, ES5)
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+
+### AI & Services
+
+- **[Groq](https://groq.com/)** - Lightning-fast AI inference with llama-3.3-70b-versatile
+- **[pdf2json](https://www.npmjs.com/package/pdf2json)** - PDF parsing library
+
+### Tools & Infrastructure
+
+- **[Docker](https://www.docker.com/)** - Containerization platform
+- **[PostgreSQL](https://www.postgresql.org/)** - Advanced open-source relational database
+- **[RxJS](https://rxjs.dev/)** - Reactive Extensions for JavaScript
+- **[Socket.io](https://socket.io/)** - Real-time bidirectional event-based communication
+
+### Inspiration
+
+- Modern design inspired by Apple and Tesla
+- Community feedback and contributions
+- Student needs and pain points research
+
+---
+
+## 📊 Project Stats
+
+<div align="center">
+
+![GitHub stars](https://img.shields.io/github/stars/YngJesus/StudyMateAI?style=social)
+![GitHub forks](https://img.shields.io/github/forks/YngJesus/StudyMateAI?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/YngJesus/StudyMateAI?style=social)
+
+![GitHub last commit](https://img.shields.io/github/last-commit/YngJesus/StudyMateAI)
+![GitHub issues](https://img.shields.io/github/issues/YngJesus/StudyMateAI)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/YngJesus/StudyMateAI)
+![GitHub](https://img.shields.io/github/license/YngJesus/StudyMateAI)
+
+</div>
+
+---
+
+<div align="center">
+
+### ⭐ If you find this project useful, please consider giving it a star!
+
+### Built with ❤️ and ☕ by [Baha Eddine Jdidi](https://github.com/YngJesus)
+
+**© 2025 StudyMateAI. All rights reserved.**
+
+</div>
