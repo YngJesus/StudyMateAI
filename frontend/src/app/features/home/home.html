@@ -1,187 +1,449 @@
-<div class="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700">
+<div
+  class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-black relative overflow-hidden"
+>
+  <!-- Animated Space Background -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
+  </div>
+
   <!-- Navigation -->
-  <nav class="bg-white/10 backdrop-blur-md border-b border-white/20">
+  <nav class="relative z-10 backdrop-blur-xl bg-black/20 border-b border-purple-500/30">
     <div class="container mx-auto px-6 py-4">
       <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold text-white">
-          StudyMate<span class="text-purple-300">AI</span>
-        </h1>
-        <div class="flex gap-4">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center"
+          >
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+              />
+            </svg>
+          </div>
+          <h1
+            class="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent"
+          >
+            StudyMateAI
+          </h1>
+        </div>
+
+        @if (authService.isAuthenticated()) {
+        <div class="relative">
+          <button
+            (click)="toggleUserMenu()"
+            class="flex items-center gap-3 px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600/30 to-cyan-600/30 border border-purple-500/50 hover:border-cyan-400/50 transition-all duration-300 backdrop-blur-md group"
+          >
+            <div
+              class="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center font-bold text-white shadow-lg shadow-purple-500/50"
+            >
+              {{ (authService.currentUser()?.fullName || 'U').charAt(0).toUpperCase() }}
+            </div>
+            <span class="font-medium text-white hidden sm:inline">{{
+              authService.currentUser()?.fullName
+            }}</span>
+            <svg
+              class="w-4 h-4 text-cyan-400 transition-transform"
+              [class.rotate-180]="showUserMenu()"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+
+          @if (showUserMenu()) {
+          <div
+            class="absolute right-0 mt-3 w-72 bg-black/90 backdrop-blur-xl rounded-xl border border-purple-500/50 shadow-2xl shadow-purple-500/20 overflow-hidden animate-slide-down"
+            style="z-index: 9999; pointer-events: auto"
+          >
+            <!-- User Info Header -->
+            <div
+              class="px-5 py-4 bg-gradient-to-r from-purple-600/20 to-cyan-600/20 border-b border-purple-500/30"
+            >
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center font-bold text-xl text-white shadow-lg"
+                >
+                  {{ (authService.currentUser()?.fullName || 'U').charAt(0).toUpperCase() }}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="font-semibold text-white truncate">
+                    {{ authService.currentUser()?.fullName }}
+                  </p>
+                  <p class="text-sm text-cyan-400 truncate">
+                    {{ authService.currentUser()?.email }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="py-2">
+              <a
+                routerLink="/dashboard"
+                (click)="showUserMenu.set(false)"
+                class="flex items-center gap-3 px-5 py-3 text-gray-300 hover:bg-purple-600/20 hover:text-white transition-all duration-200 group cursor-pointer"
+              >
+                <svg
+                  class="w-5 h-5 text-purple-400 group-hover:text-cyan-400 transition-colors"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                  />
+                </svg>
+                <span class="font-medium">Dashboard</span>
+              </a>
+
+              <a
+                routerLink="/chat"
+                (click)="showUserMenu.set(false)"
+                class="flex items-center gap-3 px-5 py-3 text-gray-300 hover:bg-purple-600/20 hover:text-white transition-all duration-200 group cursor-pointer"
+              >
+                <svg
+                  class="w-5 h-5 text-purple-400 group-hover:text-cyan-400 transition-colors"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                  />
+                </svg>
+                <span class="font-medium">AI Chat</span>
+              </a>
+
+              <a
+                routerLink="/calendar"
+                (click)="showUserMenu.set(false)"
+                class="flex items-center gap-3 px-5 py-3 text-gray-300 hover:bg-purple-600/20 hover:text-white transition-all duration-200 group cursor-pointer"
+              >
+                <svg
+                  class="w-5 h-5 text-purple-400 group-hover:text-cyan-400 transition-colors"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                <span class="font-medium">Calendar</span>
+              </a>
+            </div>
+
+            <div class="border-t border-purple-500/30 py-2">
+              <button
+                (click)="logout()"
+                class="w-full flex items-center gap-3 px-5 py-3 text-red-400 hover:bg-red-600/20 hover:text-red-300 transition-all duration-200 group"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
+                </svg>
+                <span class="font-medium">Logout</span>
+              </button>
+            </div>
+          </div>
+          }
+        </div>
+        } @else {
+        <div class="flex gap-3">
           <a
             routerLink="/auth/login"
-            class="px-4 py-2 text-white hover:bg-white/10 rounded-lg transition"
-            >Login</a
+            class="px-6 py-2.5 text-white border-2 border-purple-500/50 rounded-lg hover:bg-purple-600/30 hover:border-purple-400/70 transition-all duration-300 font-medium backdrop-blur-md"
           >
+            Login
+          </a>
           <a
             routerLink="/auth/signup"
-            class="px-4 py-2 bg-white text-purple-600 hover:bg-purple-50 rounded-lg font-semibold transition"
-            >Sign Up</a
+            class="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-cyan-600 text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 hover:scale-105 transition-all duration-300"
           >
+            Sign Up
+          </a>
         </div>
+        }
       </div>
     </div>
   </nav>
 
   <!-- Hero Section -->
-  <div class="container mx-auto px-6 py-16">
-    <div class="text-center mb-16 animate-fade-in">
-      <h1 class="text-6xl font-extrabold text-white mb-6 drop-shadow-lg">Welcome to StudyMateAI</h1>
-      <p class="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
-        Your AI-powered learning companion. Organize your studies, get instant help, and excel in
-        your academic journey.
+  <div class="relative z-10 container mx-auto px-6 py-20">
+    <div class="text-center mb-20">
+      <div
+        class="inline-block mb-6 px-4 py-2 rounded-full bg-purple-600/30 border border-purple-500/50 backdrop-blur-md"
+      >
+        <span class="text-cyan-400 font-semibold">AI-Powered Learning Platform</span>
+      </div>
+      <h1
+        class="text-7xl font-extrabold mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
+      >
+        Welcome to the Future
+      </h1>
+      <p class="text-2xl text-gray-300 mb-10 max-w-3xl mx-auto">
+        Experience next-generation learning with AI assistance, smart analytics, and seamless
+        organization
       </p>
-      <div class="flex gap-4 justify-center">
+      <div class="flex gap-5 justify-center">
         <a
-          routerLink="/dashboard"
-          class="px-8 py-4 bg-white text-purple-600 rounded-xl font-bold text-lg hover:scale-105 transform transition shadow-2xl hover:shadow-purple-500/50"
+          [href]="environment.SwaggerUrl"
+          target="_blank"
+          class="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl font-bold text-lg hover:shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105"
         >
-          Get Started →
+          API Docs
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+            />
+          </svg>
         </a>
         <a
-          href="#features"
-          class="px-8 py-4 bg-white/10 backdrop-blur-md text-white rounded-xl font-bold text-lg hover:bg-white/20 transition border border-white/30"
+          [href]="environment.PgAdminUrl"
+          target="_blank"
+          class="inline-flex items-center gap-2 px-10 py-4 border-2 border-cyan-500/50 text-white rounded-xl font-bold text-lg hover:bg-cyan-600/20 transition-all duration-300"
         >
-          Learn More
+          PgAdmin
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
+            />
+          </svg>
         </a>
       </div>
     </div>
 
     <!-- Feature Cards -->
-    <div id="features" class="grid md:grid-cols-3 gap-8 mb-16">
-      <!-- AI Assistant Card -->
+    <div id="features" class="grid md:grid-cols-3 gap-6 mb-20">
       <div
-        class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 hover:scale-105 transform transition duration-300 hover:shadow-2xl"
+        class="group relative bg-gradient-to-br from-purple-900/50 to-black/50 backdrop-blur-md rounded-2xl p-8 border border-purple-500/30 hover:border-cyan-400/50 transition-all duration-300 hover:scale-105"
       >
-        <div class="text-5xl mb-4">🤖</div>
-        <h3 class="text-2xl font-bold text-white mb-3">AI Assistant</h3>
-        <p class="text-purple-100">
-          Get instant answers to your questions with our advanced AI-powered study assistant.
-        </p>
-      </div>
-
-      <!-- Course Management Card -->
-      <div
-        class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 hover:scale-105 transform transition duration-300 hover:shadow-2xl"
-      >
-        <div class="text-5xl mb-4">📚</div>
-        <h3 class="text-2xl font-bold text-white mb-3">Course Management</h3>
-        <p class="text-purple-100">
-          Organize all your subjects, assignments, and study materials in one place.
-        </p>
-      </div>
-
-      <!-- Analytics Card -->
-      <div
-        class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 hover:scale-105 transform transition duration-300 hover:shadow-2xl"
-      >
-        <div class="text-5xl mb-4">📊</div>
-        <h3 class="text-2xl font-bold text-white mb-3">Smart Analytics</h3>
-        <p class="text-purple-100">
-          Track your progress and get insights to improve your study habits.
-        </p>
-      </div>
-    </div>
-
-    <!-- Developer Tools Section -->
-    <div class="bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/20">
-      <h2 class="text-3xl font-bold text-white mb-6 flex items-center gap-3">
-        <span>🛠️</span> Developer Tools
-      </h2>
-      <div class="grid md:grid-cols-2 gap-6">
-        <!-- Swagger Card -->
         <div
-          class="bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl p-6 border border-orange-300/30 hover:border-orange-300/60 transition"
-        >
-          <h3 class="text-xl font-semibold text-white mb-3 flex items-center gap-2">
-            <span>📖</span> API Documentation
-          </h3>
-          <p class="text-purple-100 mb-4">Explore and test all backend endpoints with Swagger UI</p>
-          <a
-            [href]="environment.SwaggerUrl"
-            target="_blank"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition font-semibold"
+          class="absolute inset-0 bg-gradient-to-br from-cyan-600/10 to-purple-600/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        ></div>
+        <div class="relative">
+          <div
+            class="w-14 h-14 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-purple-500/50"
           >
-            Open Swagger
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
               />
             </svg>
-          </a>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-3">AI Assistant</h3>
+          <p class="text-gray-400">
+            Advanced AI that understands your questions and provides instant, accurate answers
+          </p>
         </div>
+      </div>
 
-        <!-- PgAdmin Card -->
+      <div
+        class="group relative bg-gradient-to-br from-purple-900/50 to-black/50 backdrop-blur-md rounded-2xl p-8 border border-purple-500/30 hover:border-cyan-400/50 transition-all duration-300 hover:scale-105"
+      >
         <div
-          class="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl p-6 border border-blue-300/30 hover:border-blue-300/60 transition"
-        >
-          <h3 class="text-xl font-semibold text-white mb-3 flex items-center gap-2">
-            <span>🗄️</span> Database Admin
-          </h3>
-          <p class="text-purple-100 mb-4">Manage your PostgreSQL database with PgAdmin interface</p>
-          <a
-            [href]="environment.PgAdminUrl"
-            target="_blank"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-semibold"
+          class="absolute inset-0 bg-gradient-to-br from-cyan-600/10 to-purple-600/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        ></div>
+        <div class="relative">
+          <div
+            class="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-purple-500/50"
           >
-            Open PgAdmin
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
               />
             </svg>
-          </a>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-3">Smart Organization</h3>
+          <p class="text-gray-400">
+            Manage courses, assignments, and study materials with intelligent categorization
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="group relative bg-gradient-to-br from-purple-900/50 to-black/50 backdrop-blur-md rounded-2xl p-8 border border-purple-500/30 hover:border-cyan-400/50 transition-all duration-300 hover:scale-105"
+      >
+        <div
+          class="absolute inset-0 bg-gradient-to-br from-cyan-600/10 to-purple-600/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        ></div>
+        <div class="relative">
+          <div
+            class="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-cyan-500/50"
+          >
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-3">Progress Analytics</h3>
+          <p class="text-gray-400">
+            Track your learning journey with detailed insights and performance metrics
+          </p>
         </div>
       </div>
     </div>
 
     <!-- Stats Section -->
-    <div class="grid md:grid-cols-4 gap-6 mt-16">
-      <div class="text-center">
-        <div class="text-4xl font-bold text-white mb-2">10k+</div>
-        <div class="text-purple-200">Active Students</div>
+    <div class="grid md:grid-cols-4 gap-6">
+      <div
+        class="text-center bg-gradient-to-br from-purple-900/30 to-black/30 backdrop-blur-md rounded-xl p-6 border border-purple-500/20"
+      >
+        <div
+          class="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-2"
+        >
+          10k+
+        </div>
+        <div class="text-gray-400">Active Learners</div>
       </div>
-      <div class="text-center">
-        <div class="text-4xl font-bold text-white mb-2">50k+</div>
-        <div class="text-purple-200">Questions Answered</div>
+      <div
+        class="text-center bg-gradient-to-br from-purple-900/30 to-black/30 backdrop-blur-md rounded-xl p-6 border border-purple-500/20"
+      >
+        <div
+          class="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent mb-2"
+        >
+          50k+
+        </div>
+        <div class="text-gray-400">Questions Solved</div>
       </div>
-      <div class="text-center">
-        <div class="text-4xl font-bold text-white mb-2">98%</div>
-        <div class="text-purple-200">Satisfaction Rate</div>
+      <div
+        class="text-center bg-gradient-to-br from-purple-900/30 to-black/30 backdrop-blur-md rounded-xl p-6 border border-purple-500/20"
+      >
+        <div
+          class="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2"
+        >
+          98%
+        </div>
+        <div class="text-gray-400">Satisfaction Rate</div>
       </div>
-      <div class="text-center">
-        <div class="text-4xl font-bold text-white mb-2">24/7</div>
-        <div class="text-purple-200">AI Support</div>
+      <div
+        class="text-center bg-gradient-to-br from-purple-900/30 to-black/30 backdrop-blur-md rounded-xl p-6 border border-purple-500/20"
+      >
+        <div
+          class="text-5xl font-bold bg-gradient-to-r from-purple-500 to-cyan-400 bg-clip-text text-transparent mb-2"
+        >
+          24/7
+        </div>
+        <div class="text-gray-400">AI Available</div>
       </div>
     </div>
   </div>
 
   <!-- Footer -->
-  <footer class="bg-white/5 backdrop-blur-md border-t border-white/10 mt-16">
-    <div class="container mx-auto px-6 py-8 text-center text-purple-200">
-      <p>&copy; 2025 StudyMateAI. Made with ❤️ for students.</p>
+  <footer class="relative z-10 bg-black/40 backdrop-blur-xl border-t border-purple-500/30 mt-20">
+    <div class="container mx-auto px-6 py-8 text-center">
+      <p class="text-gray-400">
+        &copy; 2025
+        <span
+          class="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent font-semibold"
+          >StudyMateAI</span
+        >. Powering the future of education.
+      </p>
     </div>
   </footer>
 </div>
 
 <style>
-  @keyframes fade-in {
+  /* Starfield Animation */
+  @keyframes move-stars {
     from {
-      opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(0);
     }
     to {
-      opacity: 1;
-      transform: translateY(0);
+      transform: translateY(-2000px);
     }
   }
 
-  .animate-fade-in {
-    animation: fade-in 1s ease-out;
+  .stars,
+  .stars2,
+  .stars3 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200%;
+    background-repeat: repeat;
+  }
+
+  .stars {
+    background-image: radial-gradient(2px 2px at 20px 30px, #eee, rgba(0, 0, 0, 0)),
+      radial-gradient(2px 2px at 60px 70px, #fff, rgba(0, 0, 0, 0)),
+      radial-gradient(1px 1px at 50px 50px, #fff, rgba(0, 0, 0, 0)),
+      radial-gradient(1px 1px at 130px 80px, #fff, rgba(0, 0, 0, 0)),
+      radial-gradient(2px 2px at 90px 10px, #fff, rgba(0, 0, 0, 0));
+    background-size: 200px 200px;
+    animation: move-stars 100s linear infinite;
+  }
+
+  .stars2 {
+    background-image: radial-gradient(1px 1px at 100px 120px, #a78bfa, rgba(0, 0, 0, 0)),
+      radial-gradient(1px 1px at 20px 170px, #06b6d4, rgba(0, 0, 0, 0)),
+      radial-gradient(1px 1px at 170px 80px, #a78bfa, rgba(0, 0, 0, 0));
+    background-size: 250px 250px;
+    animation: move-stars 150s linear infinite;
+  }
+
+  .stars3 {
+    background-image: radial-gradient(1px 1px at 75px 75px, #06b6d4, rgba(0, 0, 0, 0)),
+      radial-gradient(2px 2px at 150px 150px, #a78bfa, rgba(0, 0, 0, 0));
+    background-size: 300px 300px;
+    animation: move-stars 200s linear infinite;
+  }
+
+  /* Dropdown Animation */
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .animate-slide-down {
+    animation: slide-down 0.2s ease-out forwards;
   }
 </style>

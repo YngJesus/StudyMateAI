@@ -122,6 +122,9 @@ export class Calendar implements OnInit {
   createEvent(): void {
     const data = this.formData();
 
+    console.log('📝 Creating event with data:', data);
+    console.log('📝 Event type:', data.type, typeof data.type);
+
     if (!data.title.trim()) {
       this.errorMessage.set('Event title is required');
       return;
@@ -192,10 +195,12 @@ export class Calendar implements OnInit {
   }
 
   updateFormField(field: keyof CreateEventDto, value: any): void {
+    console.log(`🔄 Updating field "${field}" to:`, value, typeof value);
     this.formData.update((current) => ({
       ...current,
-      [field]: value,
+      [field]: field === 'type' ? (value as EventType) : value,
     }));
+    console.log('📋 Form data after update:', this.formData());
   }
 
   getEventIcon(type: EventType): string {

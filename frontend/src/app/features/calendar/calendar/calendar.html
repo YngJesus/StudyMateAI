@@ -175,6 +175,7 @@
           (change)="updateFormField('type', $any($event.target).value)"
           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
+          <option value="">Select event type</option>
           @for (type of eventTypes; track type.value) {
           <option [value]="type.value">{{ type.label }}</option>
           }
