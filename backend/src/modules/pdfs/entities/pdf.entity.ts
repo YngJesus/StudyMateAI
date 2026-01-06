@@ -31,13 +31,16 @@ export class Pdf {
   @Column({ type: 'jsonb', nullable: true, default: () => "'[]'::jsonb" })
   tags?: string[];
 
-  @Column({ type: 'uuid' })
-  courseId: string;
+  @Column({ type: 'uuid', nullable: true })
+  courseId?: string;
 
   @ApiHideProperty()
-  @ManyToOne(() => Course, (course) => course.pdfs, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Course, (course) => course.pdfs, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
   @JoinColumn({ name: 'courseId' })
-  course: Course;
+  course?: Course;
 
   @CreateDateColumn({
     type: 'timestamp with time zone',

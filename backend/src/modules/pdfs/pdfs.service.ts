@@ -28,13 +28,11 @@ export class PdfsService {
   ) {
     if (!file) throw new Error('No file provided');
 
+    // Use 'chat-uploads' directory for PDFs without a course
+    const targetDir = uploadPdfDto.courseId || 'chat-uploads';
+
     // Create the final destination path
-    const finalDir = path.join(
-      'uploads',
-      'pdfs',
-      userId,
-      uploadPdfDto.courseId,
-    );
+    const finalDir = path.join('uploads', 'pdfs', userId, targetDir);
     fs.mkdirSync(finalDir, { recursive: true });
 
     const finalPath = path.join(finalDir, path.basename(file.path));
@@ -85,7 +83,7 @@ export class PdfsService {
     if (!pdf) throw new NotFoundException('PDF not found');
 
     // 2. Permission check
-    if (pdf.course.subject.user.id !== userId) {
+    if (pdf.course && pdf.course.subject.user.id !== userId) {
       throw new ForbiddenException('You do not own this PDF');
     }
 
@@ -114,7 +112,7 @@ export class PdfsService {
     }
 
     // 2. Permission check
-    if (pdf.course.subject.user.id !== userId) {
+    if (pdf.course && pdf.course.subject.user.id !== userId) {
       throw new ForbiddenException('You do not have access to this PDF');
     }
 
@@ -147,7 +145,7 @@ export class PdfsService {
       throw new NotFoundException('PDF not found');
     }
     // 2. Permission check
-    if (pdf.course.subject.user.id !== userId) {
+    if (pdf.course && pdf.course.subject.user.id !== userId) {
       throw new ForbiddenException('You do not have access to this PDF');
     }
     // 3. Update metadata

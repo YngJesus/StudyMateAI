@@ -1,46 +1,64 @@
 <div class="space-y-6">
   <!-- Header -->
-  <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between bg-white rounded-xl shadow-lg p-6">
     <div>
-      <h1 class="text-3xl font-bold text-gray-800">Calendar & Events</h1>
+      <h1
+        class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-cyan-600 bg-clip-text text-transparent"
+      >
+        Calendar & Events
+      </h1>
       <p class="text-gray-600 mt-1">Manage your exams, assignments, and deadlines</p>
     </div>
     <button
       (click)="openCreateModal()"
-      class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-colors"
+      class="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-all shadow-lg"
     >
-      <span class="text-xl">➕</span>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
       <span>Add Event</span>
     </button>
   </div>
 
   <!-- Filters -->
-  <div class="bg-white rounded-lg shadow-sm p-4">
-    <div class="flex gap-4 flex-wrap">
+  <div class="bg-white rounded-xl shadow-md p-5">
+    <div class="flex gap-3 flex-wrap">
       <button
         (click)="selectedFilter.set('upcoming')"
-        [class.bg-blue-600]="selectedFilter() === 'upcoming'"
+        [class.bg-gradient-to-r]="selectedFilter() === 'upcoming'"
+        [class.from-purple-600]="selectedFilter() === 'upcoming'"
+        [class.to-cyan-600]="selectedFilter() === 'upcoming'"
         [class.text-white]="selectedFilter() === 'upcoming'"
+        [class.shadow-md]="selectedFilter() === 'upcoming'"
         [class.bg-gray-100]="selectedFilter() !== 'upcoming'"
-        class="px-4 py-2 rounded-lg transition-colors"
+        [class.text-gray-700]="selectedFilter() !== 'upcoming'"
+        class="px-5 py-2.5 rounded-lg transition-all font-medium"
       >
         Upcoming
       </button>
       <button
         (click)="selectedFilter.set('all')"
-        [class.bg-blue-600]="selectedFilter() === 'all'"
+        [class.bg-gradient-to-r]="selectedFilter() === 'all'"
+        [class.from-purple-600]="selectedFilter() === 'all'"
+        [class.to-cyan-600]="selectedFilter() === 'all'"
         [class.text-white]="selectedFilter() === 'all'"
+        [class.shadow-md]="selectedFilter() === 'all'"
         [class.bg-gray-100]="selectedFilter() !== 'all'"
-        class="px-4 py-2 rounded-lg transition-colors"
+        [class.text-gray-700]="selectedFilter() !== 'all'"
+        class="px-5 py-2.5 rounded-lg transition-all font-medium"
       >
         All Events
       </button>
       <button
         (click)="selectedFilter.set('past')"
-        [class.bg-blue-600]="selectedFilter() === 'past'"
+        [class.bg-gradient-to-r]="selectedFilter() === 'past'"
+        [class.from-purple-600]="selectedFilter() === 'past'"
+        [class.to-cyan-600]="selectedFilter() === 'past'"
         [class.text-white]="selectedFilter() === 'past'"
+        [class.shadow-md]="selectedFilter() === 'past'"
         [class.bg-gray-100]="selectedFilter() !== 'past'"
-        class="px-4 py-2 rounded-lg transition-colors"
+        [class.text-gray-700]="selectedFilter() !== 'past'"
+        class="px-5 py-2.5 rounded-lg transition-all font-medium"
       >
         Past
       </button>

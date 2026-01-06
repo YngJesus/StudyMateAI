@@ -1,14 +1,20 @@
 <div class="profile-container p-6 max-w-4xl mx-auto">
   <!-- Header -->
-  <h1 class="text-3xl font-bold text-gray-900 mb-6">My Profile</h1>
+  <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+    <h1
+      class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-cyan-600 bg-clip-text text-transparent"
+    >
+      My Profile
+    </h1>
+  </div>
 
   @if (authService.currentUser()) {
   <!-- Profile Card -->
-  <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+  <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
     <div class="flex items-start justify-between mb-6">
       <div class="flex items-center gap-4">
         <div
-          class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold"
+          class="w-20 h-20 bg-gradient-to-br from-purple-600 to-cyan-600 rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg"
         >
           {{ authService.currentUser()!.fullName.charAt(0) }}
         </div>
@@ -21,7 +27,7 @@
       </div>
       <button
         (click)="openEditModal()"
-        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        class="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-cyan-600 text-white rounded-lg hover:from-purple-500 hover:to-cyan-500 transition-all shadow-md font-medium"
       >
         Edit Profile
       </button>
@@ -43,7 +49,7 @@
   <!-- Actions -->
   <div class="grid md:grid-cols-2 gap-4">
     <!-- Change Password Card -->
-    <div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="bg-white rounded-xl shadow-lg p-6">
       <h3 class="text-lg font-semibold text-gray-900 mb-2">Security</h3>
       <p class="text-gray-600 text-sm mb-4">Update your password to keep your account secure</p>
       <button
@@ -55,7 +61,7 @@
     </div>
 
     <!-- Delete Account Card -->
-    <div class="bg-white rounded-lg shadow-sm p-6 border-2 border-red-200">
+    <div class="bg-white rounded-xl shadow-lg p-6 border-2 border-red-200">
       <h3 class="text-lg font-semibold text-red-600 mb-2">Danger Zone</h3>
       <p class="text-gray-600 text-sm mb-4">Permanently delete your account and all data</p>
       <button

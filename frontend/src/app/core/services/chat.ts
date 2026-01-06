@@ -95,9 +95,20 @@ export class ChatService {
    * Send a message in a session
    */
   sendMessage(sessionId: string, data: SendMessageDto): Observable<ChatMessage> {
+    console.log('🔄 ChatService sending message:', {
+      sessionId,
+      hasPdfFileId: !!data.pdfFileId,
+      pdfFileId: data.pdfFileId,
+      messagePreview: data.message.substring(0, 30) + '...',
+    });
+
     this.isSending.set(true);
     return this.http.post<ChatMessage>(`${this.apiUrl}/${sessionId}`, data).pipe(
       tap((response) => {
+        console.log('✅ Received response:', {
+          hasPdfFileId: !!response.pdfFileId,
+          pdfFileName: response.pdfFileName,
+        });
         // Add the new message to the list
         this.messages.update((current) => [...current, response]);
         this.isSending.set(false);

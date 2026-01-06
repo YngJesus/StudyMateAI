@@ -172,7 +172,7 @@ export class DashboardService {
       activities.push({
         type: 'pdf_upload',
         title: `Uploaded PDF: ${pdf.fileName}`,
-        description: `To course: ${pdf.course.name}`,
+        description: `To course: ${pdf.course?.name || 'Chat upload'}`,
         timestamp: pdf.uploadDate,
         icon: '📄',
       });

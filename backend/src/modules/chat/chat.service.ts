@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ChatHistory } from './entities/chat-history.entity';
+import { ChatSession } from './messages/chat-message.entity';
 import { Pdf } from '../pdfs/entities/pdf.entity';
 import { ConfigService } from '@nestjs/config';
 import { ChatMessageDto } from './dto/chat-message.dto';
@@ -23,6 +24,8 @@ export class ChatService {
   constructor(
     @InjectRepository(ChatHistory)
     private chatRepository: Repository<ChatHistory>,
+    @InjectRepository(ChatSession)
+    private sessionRepository: Repository<ChatSession>,
     @InjectRepository(Pdf)
     private pdfRepository: Repository<Pdf>,
     private configService: ConfigService,
@@ -70,7 +73,12 @@ export class ChatService {
                   if (textItem.R) {
                     textItem.R.forEach((run: any) => {
                       if (run.T) {
-                        text += decodeURIComponent(run.T) + ' ';
+                        try {
+                          text += decodeURIComponent(run.T) + ' ';
+                        } catch (e) {
+                          // Handle malformed URI by using the raw text
+                          text += run.T.replace(/%/g, '') + ' ';
+                        }
                       }
                     });
                   }
@@ -90,7 +98,6 @@ export class ChatService {
             return;
           }
 
-          // Groq can handle large contexts!
           if (text.length > 20000) {
             text = text.substring(0, 20000) + '...';
           }
@@ -108,11 +115,14 @@ export class ChatService {
   }
 
   /**
-   * Get recent chat history for context
+   * Get recent chat history for context (session-aware)
    */
-  private async getRecentContext(userId: string): Promise<any[]> {
+  private async getRecentContext(
+    userId: string,
+    sessionId: string,
+  ): Promise<any[]> {
     const recentChats = await this.chatRepository.find({
-      where: { userId },
+      where: { userId, sessionId },
       order: { createdAt: 'DESC' },
       take: 5,
     });
@@ -131,7 +141,46 @@ export class ChatService {
   }
 
   /**
-   * Call Groq AI (FREE & SUPER FAST!)
+   * Natural, conversational system prompt
+   */
+  private getSystemPrompt(): string {
+    return `You're StudyMate AI - a smart study buddy for university students. Talk naturally and be helpful.
+
+What you're great at:
+- Breaking down PDFs and course material into clear notes
+- Creating quizzes that actually test understanding (not just memorization)
+- Explaining tough concepts in ways that click
+- Helping students figure out what to study and when
+
+How to be:
+- Conversational and chill, not robotic
+- Clear and direct - no fluff
+- Explain WHY things work, not just WHAT they are
+- Adapt to how the student talks and what they need
+
+When creating notes:
+- Use headings and structure that makes sense
+- Pull out the important stuff
+- Add examples when they help
+- Make it scannable and easy to review
+
+When making quizzes:
+- Mix up question types (multiple choice, true/false, short answer, real scenarios)
+- Include good explanations for answers
+- Vary the difficulty - some easy warm-ups, some that make them think
+- Make sure questions actually test understanding, not just recall
+
+When explaining concepts:
+- Start simple, then go deeper
+- Use analogies and examples from real life when possible
+- Break complex stuff into bite-sized pieces
+- Connect it to things they might already know
+
+Be natural. If they ask casually, respond casually. If they want something formal, match that. Read the room and adjust.`;
+  }
+
+  /**
+   * Call Groq AI with enhanced prompt
    */
   private async callGroqChat(
     message: string,
@@ -150,45 +199,7 @@ export class ChatService {
       const messages: any[] = [
         {
           role: 'system',
-          content: `You are StudyMate AI, a specialized study assistant for university students.
-
-CAPABILITIES:
-- Summarize PDFs and study materials (be concise, highlight key points)
-- Generate practice questions (multiple choice, true/false, short answer)
-- Explain complex concepts in simple terms with examples
-- Create study plans and revision schedules
-- Answer questions about course content
-
-PERSONALITY:
-- Encouraging and supportive (students may be stressed)
-- Clear and concise (avoid overwhelming with information)
-- Educational (don't just give answers, explain WHY)
-
-QUIZ FORMAT (when asked to generate quiz):
-Generate exactly 10 questions in this format:
-1. [Multiple Choice] Question here
-   A) Option 1
-   B) Option 2
-   C) Option 3
-   D) Option 4
-   Correct Answer: B
-
-2. [True/False] Statement here
-   Correct Answer: True
-
-3. [Short Answer] Question here
-   Suggested Answer: Brief answer here
-
-SUMMARY FORMAT (when asked to summarize):
-- Main Topic: [title]
-- Key Points:
-  • Point 1
-  • Point 2
-  • Point 3
-- Important Concepts: [list]
-- Study Tips: [if relevant]
-
-If you don't have enough information, ask clarifying questions.`,
+          content: this.getSystemPrompt(),
         },
       ];
 
@@ -197,36 +208,43 @@ If you don't have enough information, ask clarifying questions.`,
         messages.push(...previousMessages);
       }
 
-      // Add PDF context if provided
+      // Add current message with PDF context if provided
       if (pdfContext) {
         messages.push({
           role: 'user',
-          content: `Here is the content from the attached PDF:\n\n${pdfContext}\n\n---\n\nNow, here's my question about it:`,
+          content: `${message}
+
+---
+📄 **ATTACHED PDF CONTENT:**
+
+${pdfContext}
+
+---
+
+Please respond to my request above using the PDF content I've attached.`,
+        });
+      } else {
+        messages.push({
+          role: 'user',
+          content: message,
         });
       }
 
-      // Add current message
-      messages.push({
-        role: 'user',
-        content: message,
-      });
-
-      // Call Groq - Using llama-3.3-70b-versatile (NEW & FREE!)
       const completion = await this.groq.chat.completions.create({
         messages: messages,
-        model: 'llama-3.3-70b-versatile', // ✅ UPDATED: New free model!
+        model: 'llama-3.3-70b-versatile',
         temperature: 0.7,
-        max_tokens: 1024,
+        max_tokens: 2048, // Increased for longer responses
         top_p: 1,
         stream: false,
       });
 
       const aiResponse = completion.choices[0]?.message?.content;
 
-      console.log('✅ Groq response received (LIGHTNING FAST!)');
+      console.log('✅ Groq response received');
 
       if (!aiResponse || aiResponse.trim().length === 0) {
-        return 'I understand your question, but I need more context to provide a helpful answer. Could you please provide more details?';
+        return "I understand your question, but I need more context to provide a helpful answer. Could you please provide more details or clarify what you'd like help with?";
       }
 
       return aiResponse.trim();
@@ -235,7 +253,7 @@ If you don't have enough information, ask clarifying questions.`,
 
       if (error.message?.includes('API key')) {
         throw new BadRequestException(
-          'Invalid API key. Please check GROQ_API_KEY in .env file. Get free key at: https://console.groq.com/keys',
+          'Invalid API key. Please check GROQ_API_KEY in .env file.',
         );
       }
 
@@ -252,6 +270,58 @@ If you don't have enough information, ask clarifying questions.`,
   }
 
   /**
+   * Auto-generate session title from first message
+   */
+  private async autoGenerateSessionTitle(
+    userId: string,
+    sessionId: string,
+    firstMessage: string,
+    isFirstMessage: boolean,
+  ): Promise<void> {
+    try {
+      // Only generate title for the very first message
+      if (isFirstMessage) {
+        const session = await this.sessionRepository.findOne({
+          where: { id: sessionId, userId },
+        });
+
+        if (!session) {
+          console.log('⚠️  Session not found for auto-title generation');
+          return;
+        }
+
+        console.log(`🔍 Checking session title: "${session.title}"`);
+
+        // Check if session still has default title
+        if (session.title === 'New Chat' || session.title === 'New chat') {
+          // Generate a smart title from the message (first 60 chars, trimmed at word boundary)
+          let autoTitle = firstMessage.trim();
+
+          if (autoTitle.length > 60) {
+            autoTitle = autoTitle.substring(0, 60);
+            const lastSpace = autoTitle.lastIndexOf(' ');
+            if (lastSpace > 30) {
+              autoTitle = autoTitle.substring(0, lastSpace);
+            }
+            autoTitle += '...';
+          }
+
+          session.title = autoTitle;
+          await this.sessionRepository.save(session);
+          console.log(`🎯 Auto-generated session title: "${autoTitle}"`);
+        } else {
+          console.log(
+            `ℹ️  Session already has custom title, skipping auto-generation`,
+          );
+        }
+      }
+    } catch (error) {
+      // Silent fail - title generation is not critical
+      console.warn('⚠️  Failed to auto-generate session title:', error.message);
+    }
+  }
+
+  /**
    * Send a chat message
    */
   async sendMessage(
@@ -259,6 +329,12 @@ If you don't have enough information, ask clarifying questions.`,
     sessionId: string,
     dto: ChatMessageDto,
   ): Promise<ChatResponseDto> {
+    console.log('📨 Received message:', {
+      message: dto.message.substring(0, 50) + '...',
+      pdfFileId: dto.pdfFileId,
+      hasPdf: !!dto.pdfFileId,
+    });
+
     let pdfFile: Pdf | null = null;
     let pdfContext: string | undefined;
 
@@ -275,17 +351,16 @@ If you don't have enough information, ask clarifying questions.`,
         throw new NotFoundException('PDF not found');
       }
 
-      if (
-        !pdfFile.course ||
-        !pdfFile.course.subject ||
-        !pdfFile.course.subject.user
-      ) {
-        throw new BadRequestException('PDF relations not properly loaded');
+      // For PDFs with a course, verify ownership
+      if (pdfFile.course) {
+        if (!pdfFile.course.subject || !pdfFile.course.subject.user) {
+          throw new BadRequestException('PDF relations not properly loaded');
+        }
+        if (pdfFile.course.subject.user.id !== userId) {
+          throw new ForbiddenException('You do not have access to this PDF');
+        }
       }
-
-      if (pdfFile.course.subject.user.id !== userId) {
-        throw new ForbiddenException('You do not have access to this PDF');
-      }
+      // For chat-uploaded PDFs without a course, ownership is implicit (user uploaded it)
 
       console.log('✅ PDF ownership verified');
 
@@ -300,8 +375,14 @@ If you don't have enough information, ask clarifying questions.`,
       }
     }
 
-    // 2. Get recent conversation context
-    const previousMessages = await this.getRecentContext(userId);
+    // 2. Get recent conversation context (session-aware)
+    const previousMessages = await this.getRecentContext(userId, sessionId);
+
+    // Check if this is the first message (for auto-title generation)
+    const isFirstMessage = previousMessages.length === 0;
+    console.log(
+      `📊 Message count in session: ${previousMessages.length / 2} (isFirst: ${isFirstMessage})`,
+    );
 
     // 3. Call Groq AI
     let aiResponse: string;
@@ -313,7 +394,7 @@ If you don't have enough information, ask clarifying questions.`,
       );
     } catch (error) {
       console.error('AI call failed:', error);
-      throw error; // Let the error propagate with proper message
+      throw error;
     }
 
     // 4. Save to database
@@ -322,13 +403,20 @@ If you don't have enough information, ask clarifying questions.`,
       response: aiResponse,
       pdfFileId: dto.pdfFileId || null,
       userId,
+      sessionId,
     });
-
-    chatHistory.sessionId = sessionId;
 
     const saved = await this.chatRepository.save(chatHistory);
 
     console.log(`✅ Chat saved with ID: ${saved.id}`);
+
+    // 4.5. Auto-generate session title from first message
+    await this.autoGenerateSessionTitle(
+      userId,
+      sessionId,
+      dto.message,
+      isFirstMessage,
+    );
 
     // 5. Return response
     return {
@@ -351,7 +439,7 @@ If you don't have enough information, ask clarifying questions.`,
     const chats = await this.chatRepository.find({
       where: { userId, sessionId },
       relations: ['pdfFile'],
-      order: { createdAt: 'DESC' },
+      order: { createdAt: 'ASC' }, // Changed to ASC for chronological order
       take: 50,
     });
 

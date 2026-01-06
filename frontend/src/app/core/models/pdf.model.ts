@@ -4,13 +4,13 @@ export interface Pdf {
   fileSize: string;
   description?: string;
   tags?: string[];
-  courseId: string;
+  courseId?: string;
   uploadDate: Date;
   lastAccessed?: Date;
 }
 
 export interface UploadPdfDto {
-  courseId: string;
+  courseId?: string;
   fileName?: string;
   description?: string;
   tags?: string[];

@@ -1,42 +1,75 @@
-<aside class="bg-gradient-to-b from-blue-600 to-blue-800 text-white h-full flex flex-col shadow-xl">
+<aside
+  class="bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white h-full flex flex-col shadow-2xl border-r border-gray-700"
+>
   <!-- Logo -->
-  <div class="p-6 border-b border-blue-500">
-    <h1 class="text-2xl font-bold flex items-center gap-2">
-      <span>📚</span>
-      <span>StudyMate AI</span>
-    </h1>
-    <p class="text-blue-200 text-sm mt-1">Smart Study Companion</p>
+  <div class="p-5 border-b border-gray-700">
+    <div class="flex items-center gap-3">
+      <div
+        class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center shadow-lg"
+      >
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+          />
+        </svg>
+      </div>
+      <div>
+        <h1
+          class="text-lg font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent"
+        >
+          StudyMate AI
+        </h1>
+        <p class="text-xs text-gray-400 mt-0.5">Smart Study Companion</p>
+      </div>
+    </div>
   </div>
 
   <!-- User Info -->
   <ng-container *ngIf="currentUser() as user">
-    <div class="p-4 bg-blue-700/50 border-b border-blue-500">
+    <div class="p-4 bg-gradient-to-r from-purple-900/30 to-cyan-900/30 border-b border-gray-700">
       <div class="flex items-center gap-3">
         <div
-          class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-lg font-bold"
+          class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-lg flex items-center justify-center text-base font-semibold shadow-lg"
         >
           {{ user.fullName.charAt(0).toUpperCase() }}
         </div>
         <div class="flex-1 min-w-0">
-          <p class="font-semibold truncate">{{ user.fullName }}</p>
-          <p class="text-xs text-blue-200 truncate">{{ user.email }}</p>
+          <p class="text-sm font-semibold truncate text-white">{{ user.fullName }}</p>
+          <p class="text-xs text-cyan-400 truncate">{{ user.email }}</p>
         </div>
       </div>
     </div>
   </ng-container>
 
   <!-- Navigation -->
-  <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+  <nav class="flex-1 p-3 space-y-1.5 overflow-y-auto">
     <ng-container *ngFor="let item of navItems; trackBy: trackByRoute">
       <a
         [routerLink]="item.route"
-        routerLinkActive="bg-blue-700"
-        class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer group"
+        routerLinkActive="bg-gradient-to-r from-purple-600 to-cyan-600 shadow-lg"
+        class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-700/50 transition-all duration-200 cursor-pointer group"
       >
-        <span class="text-2xl">{{ item.icon }}</span>
-        <span class="font-medium">{{ item.label }}</span>
+        <svg
+          class="w-5 h-5 group-hover:scale-110 transition-transform"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            [attr.d]="item.iconPath"
+          />
+        </svg>
+        <span class="text-sm font-medium">{{ item.label }}</span>
         <ng-container *ngIf="item.badge">
-          <span class="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+          <span
+            class="ml-auto bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-lg"
+          >
             {{ item.badge }}
           </span>
         </ng-container>
@@ -45,13 +78,20 @@
   </nav>
 
   <!-- Logout Button -->
-  <div class="p-4 border-t border-blue-500">
+  <div class="p-4 border-t border-gray-700">
     <button
       (click)="logout()"
-      class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-600 transition-colors bg-red-500"
+      class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-red-600/80 transition-all duration-200 bg-gradient-to-r from-red-600 to-red-700 shadow-lg"
     >
-      <span class="text-2xl">🚪</span>
-      <span class="font-medium">Logout</span>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+        />
+      </svg>
+      <span class="text-sm font-medium">Logout</span>
     </button>
   </div>
 </aside>

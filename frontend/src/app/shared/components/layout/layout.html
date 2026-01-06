@@ -1,14 +1,14 @@
-<div class="flex h-screen bg-gray-100">
+<div class="flex h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
   <!-- Sidebar -->
   <app-sidebar class="w-64 flex-shrink-0" />
 
   <!-- Main Content Area -->
   <div class="flex-1 flex flex-col overflow-hidden">
     <!-- Navbar -->
-    <app-navbar />
+    <app-navbar class="relative z-50" />
 
     <!-- Page Content -->
-    <main class="flex-1 overflow-y-auto p-6">
+    <main class="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-gray-50 to-gray-100 relative z-0">
       <router-outlet />
     </main>
   </div>

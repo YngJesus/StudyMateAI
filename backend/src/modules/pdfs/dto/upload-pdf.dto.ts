@@ -63,12 +63,13 @@ import { Transform } from 'class-transformer';
 import { IsString, IsOptional, IsUUID, IsArray } from 'class-validator';
 
 export class UploadPdfDto {
-  @ApiProperty({
-    description: 'Course id this PDF belongs to',
+  @ApiPropertyOptional({
+    description: 'Course id this PDF belongs to (optional for chat uploads)',
     example: '123e4567-e89b-12d3-a456-426614174000',
   })
+  @IsOptional()
   @IsUUID()
-  courseId: string;
+  courseId?: string;
 
   @ApiPropertyOptional({
     description: 'Optional filename to store',

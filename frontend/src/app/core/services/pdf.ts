@@ -39,7 +39,11 @@ export class PdfService {
   ): Observable<Pdf> {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('courseId', courseId);
+
+    // Only add courseId if it's not empty (for chat uploads)
+    if (courseId) {
+      formData.append('courseId', courseId);
+    }
 
     if (metadata?.description) {
       formData.append('description', metadata.description);

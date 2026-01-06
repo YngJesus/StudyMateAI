@@ -1,14 +1,29 @@
-<div class="flex h-[calc(100vh-200px)] gap-4">
+<div
+  class="flex h-[calc(100vh-80px)] gap-4 p-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 -m-6"
+>
   <!-- Sessions Sidebar -->
-  <div class="w-80 bg-white rounded-xl shadow-md p-4 flex flex-col">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-bold text-gray-800">Chat Sessions</h2>
+  <div
+    class="w-48 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-2xl p-4 flex flex-col border border-gray-700"
+  >
+    <div class="flex items-center justify-between mb-5">
+      <h2
+        class="text-lg font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent"
+      >
+        Chat Sessions
+      </h2>
       <button
         (click)="openNewSessionModal()"
-        class="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+        class="p-2 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white rounded-lg transition-all shadow-lg"
         title="New Chat"
       >
-        <span class="text-xl">➕</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4v16m8-8H4"
+          />
+        </svg>
       </button>
     </div>
 
@@ -16,42 +31,80 @@
     <div class="flex-1 overflow-y-auto space-y-2">
       @if (chatService.isLoading()) {
       <div class="flex justify-center py-8">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </div>
       } @else if (chatService.sessions().length === 0) {
-      <div class="text-center py-8 text-gray-500">
-        <p class="text-4xl mb-2">💬</p>
-        <p>No chat sessions yet</p>
-        <p class="text-sm">Create one to start chatting!</p>
+      <div class="text-center py-8 text-gray-400">
+        <svg
+          class="w-16 h-16 mx-auto mb-3 text-gray-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+          />
+        </svg>
+        <p class="text-white font-medium">No chat sessions yet</p>
+        <p class="text-sm mt-1">Create one to start!</p>
       </div>
       } @else { @for (session of chatService.sessions(); track session.id) {
       <div
         (click)="selectSession(session)"
-        [class.bg-blue-50]="chatService.currentSession()?.id === session.id"
-        [class.border-blue-500]="chatService.currentSession()?.id === session.id"
-        class="p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors group"
+        [class.bg-gradient-to-r]="chatService.currentSession()?.id === session.id"
+        [class.from-purple-600]="chatService.currentSession()?.id === session.id"
+        [class.to-cyan-600]="chatService.currentSession()?.id === session.id"
+        [class.border-purple-500]="chatService.currentSession()?.id === session.id"
+        class="p-3 rounded-lg border border-gray-600 hover:bg-gray-700/50 cursor-pointer transition-all group"
       >
         <div class="flex items-start justify-between">
           <div class="flex-1 min-w-0">
-            <h3 class="font-semibold text-gray-800 truncate">{{ session.title }}</h3>
-            <p class="text-xs text-gray-500">
+            <h3 class="text-sm font-semibold text-white truncate">{{ session.title }}</h3>
+            <p class="text-xs text-gray-400 mt-0.5">
               {{ session.updatedAt | date : 'short' }}
             </p>
           </div>
           <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
             <button
               (click)="openRenameModal(session, $event)"
-              class="p-1 hover:bg-gray-200 rounded"
+              class="p-1 hover:bg-gray-600 rounded"
               title="Rename"
             >
-              ✏️
+              <svg
+                class="w-4 h-4 text-blue-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
             </button>
             <button
               (click)="deleteSession(session, $event)"
-              class="p-1 hover:bg-red-100 rounded text-red-600"
+              class="p-1 hover:bg-red-900 rounded"
               title="Delete"
             >
-              🗑️
+              <svg
+                class="w-4 h-4 text-red-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
             </button>
           </div>
         </div>
@@ -61,30 +114,142 @@
   </div>
 
   <!-- Chat Area -->
-  <div class="flex-1 bg-white rounded-xl shadow-md flex flex-col">
+  <div
+    class="flex-1 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-2xl flex flex-col border border-gray-700"
+  >
     @if (chatService.currentSession(); as session) {
     <!-- Chat Header -->
-    <div class="p-4 border-b border-gray-200">
-      <h2 class="text-xl font-bold text-gray-800">{{ session.title }}</h2>
-      <p class="text-sm text-gray-500">Chat with AI about your studies</p>
+    <div
+      class="p-4 border-b border-gray-700 bg-gradient-to-r from-gray-800/50 to-gray-900/50 shadow-lg"
+    >
+      <h2
+        class="text-base font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent"
+      >
+        {{ session.title }}
+      </h2>
+      <p class="text-xs text-gray-400 mt-0.5">Chat with AI • Upload PDFs for analysis</p>
     </div>
 
     <!-- Messages -->
-    <div #messagesContainer class="flex-1 overflow-y-auto p-6 space-y-6">
+    <div
+      #messagesContainer
+      class="flex-1 overflow-y-auto p-10 space-y-6 bg-gradient-to-b from-gray-900 to-gray-800"
+    >
       @if (chatService.messages().length === 0) {
       <div class="flex items-center justify-center h-full text-gray-400">
-        <div class="text-center">
-          <p class="text-6xl mb-4">🤖</p>
-          <p class="text-xl font-semibold">Start a conversation!</p>
-          <p class="text-sm mt-2">Ask me anything about your studies</p>
+        <div class="text-center max-w-2xl">
+          <svg
+            class="w-20 h-20 mx-auto mb-6 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+            />
+          </svg>
+          <p class="text-xl font-semibold mb-3 text-white">Start a conversation!</p>
+          <p class="text-sm text-gray-400 mb-6">I can help you with:</p>
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <div
+              class="bg-gradient-to-br from-blue-900/50 to-blue-800/50 p-4 rounded-xl border border-blue-700/50 shadow-md"
+            >
+              <svg
+                class="w-7 h-7 mx-auto mb-2 text-blue-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+              <span class="text-gray-300">Create study notes</span>
+            </div>
+            <div
+              class="bg-gradient-to-br from-purple-900/50 to-purple-800/50 p-4 rounded-xl border border-purple-700/50 shadow-md"
+            >
+              <svg
+                class="w-7 h-7 mx-auto mb-2 text-purple-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                />
+              </svg>
+              <span class="text-gray-300">Generate quizzes</span>
+            </div>
+            <div
+              class="bg-gradient-to-br from-green-900/50 to-green-800/50 p-4 rounded-xl border border-green-700/50 shadow-md"
+            >
+              <svg
+                class="w-7 h-7 mx-auto mb-2 text-green-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              <span class="text-gray-300">Analyze PDFs</span>
+            </div>
+            <div
+              class="bg-gradient-to-br from-orange-900/50 to-orange-800/50 p-4 rounded-xl border border-orange-700/50 shadow-md"
+            >
+              <svg
+                class="w-7 h-7 mx-auto mb-2 text-orange-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                />
+              </svg>
+              <span class="text-gray-300">Explain concepts</span>
+            </div>
+          </div>
         </div>
       </div>
       } @else { @for (message of chatService.messages(); track message.id) {
       <!-- User Message -->
       <div class="flex justify-end">
-        <div class="max-w-[70%] bg-blue-600 text-white rounded-2xl px-4 py-3 shadow-sm">
-          <p class="whitespace-pre-wrap">{{ message.message }}</p>
-          <p class="text-blue-200 text-xs mt-1">
+        <div
+          class="max-w-[75%] bg-gradient-to-r from-purple-600 to-cyan-600 text-white rounded-2xl px-5 py-3 shadow-xl"
+        >
+          <p class="text-sm whitespace-pre-wrap break-words">{{ message.message }}</p>
+          @if (message.pdfFileName) {
+          <div class="mt-2 pt-2 border-t border-purple-400/50 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <span class="text-sm">{{ message.pdfFileName }}</span>
+          </div>
+          }
+          <p class="text-purple-200 text-xs mt-2">
             {{ message.createdAt | date : 'shortTime' }}
           </p>
         </div>
@@ -92,113 +257,369 @@
 
       <!-- AI Response -->
       <div class="flex justify-start">
-        <div class="max-w-[70%] bg-gray-100 text-gray-800 rounded-2xl px-4 py-3 shadow-sm">
-          <p class="whitespace-pre-wrap">{{ message.response }}</p>
-          @if (message.pdfFileName) {
-          <div class="mt-2 pt-2 border-t border-gray-200">
-            <p class="text-xs text-gray-500">📄 {{ message.pdfFileName }}</p>
-          </div>
-          }
-          <p class="text-gray-500 text-xs mt-1">
+        <div
+          class="max-w-[75%] bg-gradient-to-br from-gray-800 to-gray-900 text-gray-100 rounded-2xl px-5 py-3 shadow-xl border border-gray-700"
+        >
+          <!-- Render markdown-style content -->
+          <div
+            class="prose prose-xs prose-invert max-w-none"
+            [innerHTML]="formatAIResponse(message.response)"
+          ></div>
+          <p class="text-gray-400 text-xs mt-2">
             {{ message.createdAt | date : 'shortTime' }}
           </p>
         </div>
       </div>
       } } @if (chatService.isSending()) {
+      <!-- Typing Indicator -->
       <div class="flex justify-start">
-        <div class="max-w-[70%] bg-gray-100 rounded-2xl px-4 py-3">
-          <div class="flex gap-2">
-            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-            <div
-              class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-              style="animation-delay: 0.2s"
-            ></div>
-            <div
-              class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-              style="animation-delay: 0.4s"
-            ></div>
+        <div
+          class="max-w-[70%] bg-gradient-to-br from-gray-800 to-gray-900 text-gray-100 rounded-2xl px-5 py-3 shadow-xl border border-gray-700"
+        >
+          <div class="flex items-center gap-3">
+            <div class="flex gap-1">
+              <div
+                class="w-2 h-2 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full animate-bounce"
+                style="animation-duration: 0.6s"
+              ></div>
+              <div
+                class="w-2 h-2 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full animate-bounce"
+                style="animation-duration: 0.6s; animation-delay: 0.15s"
+              ></div>
+              <div
+                class="w-2 h-2 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full animate-bounce"
+                style="animation-duration: 0.6s; animation-delay: 0.3s"
+              ></div>
+            </div>
+            <span class="text-sm text-gray-400">AI is typing...</span>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    } @else {
+    <!-- No Session Selected - Empty State -->
+    <div
+      class="flex-1 flex items-center justify-center text-gray-400 bg-gradient-to-b from-gray-900 to-gray-800"
+    >
+      <div class="text-center">
+        <svg
+          class="w-20 h-20 mx-auto mb-4 text-gray-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+          />
+        </svg>
+        <p class="text-lg font-semibold text-white">Ready to chat?</p>
+        <p class="text-sm mt-2 text-gray-400">
+          Just start typing below to begin a new conversation
+        </p>
+      </div>
+    </div>
+    }
+
+    <!-- Input Area - Always visible -->
+    <div class="p-5 border-t border-gray-700 bg-gradient-to-r from-gray-800 to-gray-900">
+      @if (errorMessage()) {
+      <div
+        class="bg-red-900/50 border border-red-700 text-red-200 px-4 py-3 rounded-lg mb-3 text-sm"
+      >
+        {{ errorMessage() }}
+      </div>
+      }
+
+      <!-- Attached PDF Preview -->
+      @if (attachedPdf()) {
+      <div
+        class="mb-4 bg-gradient-to-r from-blue-900/50 to-purple-900/50 border border-blue-700/50 rounded-xl p-4 flex items-center justify-between"
+      >
+        <div class="flex items-center gap-3">
+          <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          <div>
+            <p class="font-semibold text-sm text-white">{{ attachedPdf()!.fileName }}</p>
+            <p class="text-xs text-gray-400">{{ formatFileSize(attachedPdf()!.fileSize) }}</p>
+          </div>
+        </div>
+        <button
+          (click)="removeAttachedPdf()"
+          class="text-red-400 hover:text-red-300"
+          title="Remove PDF"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+      }
+
+      <!-- Quick Action Buttons -->
+      <div class="flex gap-2 mb-3 flex-wrap">
+        <button
+          (click)="insertTemplate('notes')"
+          class="px-3 py-2 bg-gradient-to-r from-blue-900/50 to-blue-800/50 hover:from-blue-800/60 hover:to-blue-700/60 text-blue-200 rounded-lg text-sm font-medium transition-all border border-blue-700/50 flex items-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+            />
+          </svg>
+          Create Notes
+        </button>
+        <button
+          (click)="insertTemplate('quiz')"
+          class="px-3 py-2 bg-gradient-to-r from-purple-900/50 to-purple-800/50 hover:from-purple-800/60 hover:to-purple-700/60 text-purple-200 rounded-lg text-sm font-medium transition-all border border-purple-700/50 flex items-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+            />
+          </svg>
+          Generate Quiz
+        </button>
+        <button
+          (click)="insertTemplate('explain')"
+          class="px-3 py-2 bg-gradient-to-r from-green-900/50 to-green-800/50 hover:from-green-800/60 hover:to-green-700/60 text-green-200 rounded-lg text-sm font-medium transition-all border border-green-700/50 flex items-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+            />
+          </svg>
+          Explain Concept
+        </button>
+        <button
+          (click)="openPdfSelector()"
+          class="px-3 py-2 bg-gradient-to-r from-orange-900/50 to-orange-800/50 hover:from-orange-800/60 hover:to-orange-700/60 text-orange-200 rounded-lg text-sm font-medium transition-all border border-orange-700/50 flex items-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+            />
+          </svg>
+          Attach PDF
+        </button>
+      </div>
+
+      <div class="flex gap-3">
+        <textarea
+          [ngModel]="messageInput()"
+          (ngModelChange)="messageInput.set($event)"
+          (keydown)="onEnterPress($event)"
+          [disabled]="chatService.isSending()"
+          placeholder="Ask me anything... (Shift+Enter for new line)"
+          rows="3"
+          class="flex-1 px-4 py-3 border border-gray-600 bg-gray-700/50 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none placeholder-gray-400 text-base"
+        ></textarea>
+        <button
+          (click)="sendMessage()"
+          [disabled]="chatService.isSending() || !messageInput().trim()"
+          class="px-6 py-3 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 disabled:from-gray-600 disabled:to-gray-700 disabled:opacity-50 text-white rounded-xl font-semibold transition-all shadow-lg self-end flex items-center gap-2 text-base"
+        >
+          @if (chatService.isSending()) {
+          <svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            />
+          </svg>
+          <span>Sending...</span>
+          } @else {
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+            />
+          </svg>
+          <span>Send</span>
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PDF Upload Option Modal -->
+@if (showPdfUploadOptionModal()) {
+<div class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+  <div
+    class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl w-full max-w-md p-8 border border-gray-700"
+  >
+    <h2
+      class="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent mb-6"
+    >
+      Attach PDF
+    </h2>
+
+    <p class="text-gray-400 text-sm mb-6">Choose how you want to attach a PDF to your message:</p>
+
+    <div class="space-y-3">
+      <button
+        (click)="chooseUploadNewPdf()"
+        class="w-full p-4 bg-gradient-to-r from-blue-900/50 to-blue-800/50 hover:from-blue-800/60 hover:to-blue-700/60 border border-blue-700/50 rounded-xl transition-all text-left group"
+      >
+        <div class="flex items-center gap-3">
+          <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+          <div>
+            <p class="font-semibold text-white group-hover:text-blue-200 text-sm">Upload New PDF</p>
+            <p class="text-xs text-gray-400">Upload a file directly from your computer</p>
+          </div>
+        </div>
+      </button>
+
+      <button
+        (click)="chooseSelectFromCourses()"
+        class="w-full p-4 bg-gradient-to-r from-gray-700/50 to-gray-600/50 hover:from-gray-600/60 hover:to-gray-500/60 border border-gray-600/50 rounded-xl transition-all text-left group"
+      >
+        <div class="flex items-center gap-3">
+          <svg
+            class="w-8 h-8 text-purple-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+            />
+          </svg>
+          <div>
+            <p class="font-semibold text-white group-hover:text-gray-200 text-sm">
+              Select from Courses
+            </p>
+            <p class="text-xs text-gray-400">Choose from your existing course PDFs</p>
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <button
+      (click)="closeModals()"
+      class="w-full mt-6 px-6 py-3 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 rounded-xl font-semibold transition-all border border-gray-600"
+    >
+      Cancel
+    </button>
+  </div>
+</div>
+}
+
+<!-- Direct PDF Upload Modal -->
+@if (showDirectUploadModal()) {
+<div class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+  <div
+    class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl w-full max-w-md p-8 border border-gray-700"
+  >
+    <h2
+      class="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent mb-6"
+    >
+      Upload PDF
+    </h2>
+
+    @if (errorMessage()) {
+    <div class="bg-red-900/50 border border-red-700 text-red-200 px-4 py-3 rounded-lg mb-4 text-sm">
+      {{ errorMessage() }}
+    </div>
+    }
+
+    <div class="mb-6">
+      <label class="block text-sm font-medium text-gray-300 mb-2"> Select PDF File </label>
+      <input
+        type="file"
+        accept="application/pdf"
+        (change)="onFileSelected($event)"
+        class="w-full px-4 py-3 border border-gray-600 bg-gray-700/50 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-purple-600 file:to-cyan-600 file:text-white hover:file:from-purple-500 hover:file:to-cyan-500 text-sm"
+      />
+
+      @if (selectedFile()) {
+      <div class="mt-3 p-3 bg-gray-700/50 rounded-lg border border-gray-600">
+        <div class="flex items-center gap-2">
+          <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-white truncate">{{ selectedFile()!.name }}</p>
+            <p class="text-xs text-gray-400">
+              {{ (selectedFile()!.size / 1024 / 1024).toFixed(2) }} MB
+            </p>
           </div>
         </div>
       </div>
       }
     </div>
 
-    <!-- Input Area -->
-    <div class="p-4 border-t border-gray-200">
-      @if (errorMessage()) {
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-3 text-sm">
-        {{ errorMessage() }}
-      </div>
-      }
-
-      <div class="flex gap-3">
-        <input
-          type="text"
-          [ngModel]="messageInput()"
-          (ngModelChange)="messageInput.set($event)"
-          (keyup.enter)="sendMessage()"
-          [disabled]="chatService.isSending()"
-          placeholder="Type your message..."
-          class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <button
-          (click)="sendMessage()"
-          [disabled]="chatService.isSending() || !messageInput().trim()"
-          class="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg font-semibold transition-colors"
-        >
-          @if (chatService.isSending()) {
-          <span>Sending...</span>
-          } @else {
-          <span>Send 📤</span>
-          }
-        </button>
-      </div>
-    </div>
-    } @else {
-    <!-- No Session Selected -->
-    <div class="flex items-center justify-center h-full text-gray-400">
-      <div class="text-center">
-        <p class="text-6xl mb-4">💬</p>
-        <p class="text-xl font-semibold">No session selected</p>
-        <p class="text-sm mt-2">Select a session or create a new one</p>
-      </div>
-    </div>
-    }
-  </div>
-</div>
-
-<!-- New Session Modal -->
-@if (showNewSessionModal()) {
-<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">New Chat Session</h2>
-
-    @if (errorMessage()) {
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-      {{ errorMessage() }}
-    </div>
-    }
-
-    <input
-      type="text"
-      [ngModel]="newSessionTitle()"
-      (ngModelChange)="newSessionTitle.set($event)"
-      placeholder="Session title (optional)..."
-      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6"
-    />
-
     <div class="flex gap-3">
       <button
         (click)="closeModals()"
-        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold"
+        [disabled]="uploadingFile()"
+        class="flex-1 bg-gray-700/50 hover:bg-gray-600/50 disabled:opacity-50 text-gray-300 py-3 rounded-xl font-semibold transition-all border border-gray-600"
       >
         Cancel
       </button>
       <button
-        (click)="createSession()"
-        class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold"
+        (click)="uploadDirectPdf()"
+        [disabled]="!selectedFile() || uploadingFile()"
+        class="flex-1 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 disabled:from-gray-600 disabled:to-gray-700 disabled:opacity-50 text-white py-3 rounded-xl font-semibold transition-all shadow-lg flex items-center justify-center gap-2"
       >
-        Create
+        @if (uploadingFile()) {
+        <svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+          />
+        </svg>
+        <span>Uploading...</span>
+        } @else {
+        <span>Attach</span>
+        }
       </button>
     </div>
   </div>
@@ -207,12 +628,18 @@
 
 <!-- Rename Session Modal -->
 @if (showRenameModal()) {
-<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">Rename Session</h2>
+<div class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+  <div
+    class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl w-full max-w-md p-8 border border-gray-700"
+  >
+    <h2
+      class="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent mb-6"
+    >
+      Rename Session
+    </h2>
 
     @if (errorMessage()) {
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    <div class="bg-red-900/50 border border-red-700 text-red-200 px-4 py-3 rounded-lg mb-4 text-sm">
       {{ errorMessage() }}
     </div>
     }
@@ -222,21 +649,278 @@
       [ngModel]="newSessionTitle()"
       (ngModelChange)="newSessionTitle.set($event)"
       placeholder="New title..."
-      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6"
+      class="w-full px-4 py-3 border border-gray-600 bg-gray-700/50 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent mb-6 placeholder-gray-400 text-sm"
     />
 
     <div class="flex gap-3">
       <button
         (click)="closeModals()"
-        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold"
+        class="flex-1 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 py-3 rounded-xl font-semibold transition-all border border-gray-600"
       >
         Cancel
       </button>
       <button
         (click)="renameSession()"
-        class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold"
+        class="flex-1 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white py-3 rounded-xl font-semibold transition-all shadow-lg"
       >
         Rename
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- PDF Selector Modal -->
+@if (showPdfSelectorModal()) {
+<div class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+  <div
+    class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl w-full max-w-2xl p-8 border border-gray-700"
+  >
+    <!-- Header with breadcrumb -->
+    <div class="mb-6">
+      <div class="flex items-center gap-2 text-sm text-gray-400 mb-3">
+        <span
+          [class.text-purple-400]="pdfSelectionStep() === 'subject'"
+          [class.font-semibold]="pdfSelectionStep() === 'subject'"
+          >1. Subject</span
+        >
+        <span>→</span>
+        <span
+          [class.text-purple-400]="pdfSelectionStep() === 'course'"
+          [class.font-semibold]="pdfSelectionStep() === 'course'"
+          >2. Course</span
+        >
+        <span>→</span>
+        <span
+          [class.text-purple-400]="pdfSelectionStep() === 'pdf'"
+          [class.font-semibold]="pdfSelectionStep() === 'pdf'"
+          >3. PDF</span
+        >
+      </div>
+
+      @if (pdfSelectionStep() === 'subject') {
+      <h2
+        class="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent"
+      >
+        Select a Subject
+      </h2>
+      } @else if (pdfSelectionStep() === 'course') {
+      <h2
+        class="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent"
+      >
+        Select a Course
+      </h2>
+      <p class="text-sm text-gray-400 mt-1">From: {{ selectedSubject()?.name }}</p>
+      } @else {
+      <h2
+        class="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent"
+      >
+        Select a PDF
+      </h2>
+      <p class="text-sm text-gray-400 mt-1">
+        From: {{ selectedSubject()?.name }} > {{ selectedCourse()?.name }}
+      </p>
+      }
+    </div>
+
+    @if (errorMessage()) {
+    <div class="bg-red-900/50 border border-red-700 text-red-200 px-4 py-3 rounded-lg mb-4 text-sm">
+      {{ errorMessage() }}
+    </div>
+    }
+
+    <!-- Content Area -->
+    <div class="max-h-96 overflow-y-auto mb-6">
+      <!-- Step 1: Select Subject -->
+      @if (pdfSelectionStep() === 'subject') { @if (subjectService.subjects().length === 0) {
+      <div class="text-center py-8 text-gray-400">
+        <svg
+          class="w-16 h-16 mx-auto mb-3 text-gray-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+          />
+        </svg>
+        <p class="text-white font-medium">No subjects available</p>
+        <p class="text-sm mt-1">Create a subject first</p>
+      </div>
+      } @else {
+      <div class="grid grid-cols-2 gap-4">
+        @for (subject of subjectService.subjects(); track subject.id) {
+        <button
+          (click)="selectSubject(subject)"
+          [disabled]="isLoadingCourses()"
+          class="p-4 border border-gray-600 bg-gray-700/50 rounded-xl hover:border-purple-500 hover:bg-gray-600/50 transition-all text-left disabled:opacity-50"
+        >
+          <div class="flex items-start gap-3">
+            <div
+              class="w-10 h-10 rounded-lg flex items-center justify-center"
+              [style.background-color]="subject.color || '#3B82F6'"
+            >
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                />
+              </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold text-white truncate">{{ subject.name }}</p>
+              @if (subject.semester) {
+              <p class="text-xs text-gray-400">{{ subject.semester }}</p>
+              }
+            </div>
+          </div>
+        </button>
+        }
+      </div>
+      } }
+
+      <!-- Step 2: Select Course -->
+      @if (pdfSelectionStep() === 'course') { @if (isLoadingCourses()) {
+      <div class="flex justify-center py-8">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
+      </div>
+      } @else if (availableCourses().length === 0) {
+      <div class="text-center py-8 text-gray-400">
+        <svg
+          class="w-16 h-16 mx-auto mb-3 text-gray-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+          />
+        </svg>
+        <p class="text-white font-medium">No courses available</p>
+        <p class="text-sm mt-1">Create a course in this subject first</p>
+      </div>
+      } @else {
+      <div class="grid grid-cols-1 gap-3">
+        @for (course of availableCourses(); track course.id) {
+        <button
+          (click)="selectCourse(course)"
+          [disabled]="isLoadingPdfs()"
+          class="p-4 border border-gray-600 bg-gray-700/50 rounded-xl hover:border-purple-500 hover:bg-gray-600/50 transition-all text-left disabled:opacity-50"
+        >
+          <div class="flex items-start gap-3">
+            <svg
+              class="w-8 h-8 text-cyan-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+              />
+            </svg>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold text-white">{{ course.name }}</p>
+              @if (course.description) {
+              <p class="text-xs text-gray-400 mt-1 line-clamp-2">{{ course.description }}</p>
+              }
+            </div>
+          </div>
+        </button>
+        }
+      </div>
+      } }
+
+      <!-- Step 3: Select PDF -->
+      @if (pdfSelectionStep() === 'pdf') { @if (isLoadingPdfs()) {
+      <div class="flex justify-center py-8">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
+      </div>
+      } @else if (availablePdfs().length === 0) {
+      <div class="text-center py-8 text-gray-400">
+        <svg
+          class="w-16 h-16 mx-auto mb-3 text-gray-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
+        </svg>
+        <p class="text-white font-medium">No PDFs available</p>
+        <p class="text-sm mt-1">Upload PDFs in this course first</p>
+      </div>
+      } @else {
+      <div class="grid grid-cols-2 gap-4">
+        @for (pdf of availablePdfs(); track pdf.id) {
+        <button
+          (click)="selectPdfToAttach(pdf)"
+          class="p-4 border border-gray-600 bg-gray-700/50 rounded-xl hover:border-purple-500 hover:bg-gray-600/50 transition-all text-left"
+        >
+          <div class="flex items-start gap-3">
+            <svg
+              class="w-8 h-8 text-blue-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-xs text-white truncate">{{ pdf.fileName }}</p>
+              <p class="text-xs text-gray-400 mt-0.5">{{ formatFileSize(pdf.fileSize) }}</p>
+            </div>
+          </div>
+        </button>
+        }
+      </div>
+      } }
+    </div>
+
+    <!-- Footer Buttons -->
+    <div class="flex justify-between">
+      @if (pdfSelectionStep() !== 'subject') {
+      <button
+        (click)="goBackToPreviousStep()"
+        class="px-6 py-3 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 rounded-xl font-semibold transition-all border border-gray-600 flex items-center gap-2"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Back
+      </button>
+      } @else {
+      <div></div>
+      }
+      <button
+        (click)="closeModals()"
+        class="px-6 py-3 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 rounded-xl font-semibold transition-all border border-gray-600"
+      >
+        Cancel
       </button>
     </div>
   </div>
